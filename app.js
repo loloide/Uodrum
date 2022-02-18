@@ -25,14 +25,17 @@ var io = require('socket.io')(server, {
   });
 
   io.sockets.on('connection', function (socket) {
-  
+    io.sockets.emit('newusr', socket.id)
+
+
     console.log("We have a new client: " + socket.id);
   
     
     socket.on('usr', function(data) {
         //console.log(socket.id + data.x + data.y)
         // Send it to all other clients
-        socket.broadcast.emit('usr', data);
+        //socket.broadcast.emit('usr', data); //(send to all except sender)
+        io.sockets.emit('usr', data) 
 
       }
     );
