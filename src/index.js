@@ -1,4 +1,4 @@
-socket = io.connect("http://localhost:3000");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
 var x = 1
 var y = 1
 
