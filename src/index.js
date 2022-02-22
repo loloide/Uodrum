@@ -11,21 +11,20 @@ function setup() {
     background("#e4e4e4")
     socket.on('usr', function(data) {
 
-        if(dots.some(dota => dota.id === data.id)){
-            console.log("Object found inside the array.");
-            dots.splice(dots.indexOf(data.id));
+        if(dots.some(dot => dot.id === data.id)){
+            console.log("Object found inside the array.")
+            objIndex = dots.findIndex((obj => obj.id == data.id));
+            dots[objIndex].x = data.x
+            dots[objIndex].y = data.y
+
+        } 
+        else {
             dots.push({
                 id: data.id,
                 x: data.x,
                 y: data.y
             });
-        } 
-        else {
-             dots.push({
-                 id: data.id,
-                 x: data.x,
-                 y: data.y
-             });
+            console.log(dots)
         }
     })
 }
@@ -42,7 +41,7 @@ function draw() {
         noStroke()
         fill("#000000")
         ellipse(value.x, value.y, 10, 10)
-      }
+    }
 
     
     
@@ -75,3 +74,34 @@ document.onkeydown = function (event) {
 
     socket.emit('usr', data);
 };
+
+
+
+// /*
+//  *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+//  *
+//  *  Use of this source code is governed by a BSD-style license
+//  *  that can be found in the LICENSE file in the root of the source
+//  *  tree.
+//  */
+// 'use strict';
+
+// // Put variables in global scope to make them available to the browser console.
+// const constraints = window.constraints = {
+//   audio: true,
+//   video: false
+// };
+
+// function handleSuccess() {
+//   console.log("connect")
+// }
+
+// function handleError() {
+
+// }
+
+// function errorMsg() {
+
+// }
+// navigator.mediaDevices.getUserMedia(constraints);
+
