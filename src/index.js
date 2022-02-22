@@ -1,4 +1,4 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 1
 var y = 1
 
@@ -11,21 +11,20 @@ function setup() {
     background("#e4e4e4")
     socket.on('usr', function(data) {
 
-        if(dots.some(dota => dota.id === data.id)){
-            console.log("Object found inside the array.");
-            dots.splice(dots.indexOf(data.id));
+        if(dots.some(dot => dot.id === data.id)){
+            console.log("Object found inside the array.")
+            objIndex = dots.findIndex((obj => obj.id == data.id));
+            dots[objIndex].x = data.x
+            dots[objIndex].y = data.y
+
+        } 
+        else {
             dots.push({
                 id: data.id,
                 x: data.x,
                 y: data.y
             });
-        } 
-        else {
-             dots.push({
-                 id: data.id,
-                 x: data.x,
-                 y: data.y
-             });
+            console.log(dots)
         }
     })
 }
@@ -42,7 +41,7 @@ function draw() {
         noStroke()
         fill("#000000")
         ellipse(value.x, value.y, 10, 10)
-      }
+    }
 
     
     
@@ -75,3 +74,5 @@ document.onkeydown = function (event) {
 
     socket.emit('usr', data);
 };
+
+
