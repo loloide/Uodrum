@@ -29,19 +29,22 @@ var io = require('socket.io')(server, {
 
 
     console.log("We have a new client: " + socket.id);
-  
-    
+
+    socket.on('voice', function(blob) {
+      // can choose to broadcast it to whoever you want
+      socket.broadcast.emit('voice', blob);
+    });
+
     socket.on('usr', function(data) {
-        //console.log(socket.id + data.x + data.y)
-        // Send it to all other clients
-        //socket.broadcast.emit('usr', data); //(send to all except sender)
         io.sockets.emit('usr', data) 
 
       }
     );
     
     socket.on('disconnect', function() {
-      console.log("Client has disconnected");
+      console.log("Client has disconnected " + socket.id);
+      io.sockets.emit('disusr', socket.id)
     });
   }
 );
+//socket.broadcast.emit('usr', data); //(send to all except sender)
