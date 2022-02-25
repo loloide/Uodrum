@@ -1,7 +1,6 @@
 socket = io.connect("http://localhost:3000");
 var x = 1
 var y = 1
-
 var dots = []
 
 function setup() {
@@ -12,7 +11,6 @@ function setup() {
     socket.on('usr', function(data) {
 
         if(dots.some(dot => dot.id === data.id)){
-            console.log("Object found inside the array.")
             objIndex = dots.findIndex((obj => obj.id == data.id));
             dots[objIndex].x = data.x
             dots[objIndex].y = data.y
@@ -29,10 +27,13 @@ function setup() {
     })
 }
  
-
+socket.on('disusr', function(data) {
+    dots.splice(dots.findIndex((obj => obj.id == data)))
+    console.log(dots.findIndex((obj => obj.id == data)))
+})
 
 socket.on('newusr', function(data) {
-    console.log(data)
+    console.log("New user: " + data + " connected")
 })
 
 function draw() {
@@ -50,19 +51,15 @@ function draw() {
 document.onkeydown = function (event) {
     switch (event.keyCode) {
         case 37:
-            console.log("Left key is pressed.");
             x = x - 2
             break;
         case 38:
-            console.log("Up key is pressed.");
             y = y - 2 
             break;
         case 39:
-            console.log("Right key is pressed.");
             x = x + 2
             break;
         case 40:
-            console.log("Down key is pressed.");
             y = y + 2
             break;
     }
@@ -75,33 +72,37 @@ document.onkeydown = function (event) {
     socket.emit('usr', data);
 };
 
+var constraints = { audio: true };
+navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+    var mediaRecorder = new MediaRecorder(mediaStream);
+    mediaRecorder.onstart = function(e) {
+        this.chunks = [];
+    };
+    mediaRecorder.ondataavailable = function(e) {
+        this.chunks.push(e.data);
+    };
+    mediaRecorder.onstop = function(e) {
+        var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
+        socket.emit('voice', blob);
+        console.log("send audio" + blob)
+    };
 
+    // Start recording
+    mediaRecorder.start();
 
-// /*
-//  *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
-//  *
-//  *  Use of this source code is governed by a BSD-style license
-//  *  that can be found in the LICENSE file in the root of the source
-//  *  tree.
-//  */
-// 'use strict';
+    // Stop recording after 5 seconds and broadcast it to server
+    setInterval(function() {
+        mediaRecorder.stop()
+        mediaRecorder.start()
+      }, 5000);
 
-// // Put variables in global scope to make them available to the browser console.
-// const constraints = window.constraints = {
-//   audio: true,
-//   video: false
-// };
+});
 
-// function handleSuccess() {
-//   console.log("connect")
-// }
-
-// function handleError() {
-
-// }
-
-// function errorMsg() {
-
-// }
-// navigator.mediaDevices.getUserMedia(constraints);
-
+// When the client receives a voice message it will play the sound
+socket.on('voice', function(arrayBuffer) {
+    var blob = new Blob([arrayBuffer], { 'type' : 'audio/ogg; codecs=opus' });
+    var audio = document.createElement('audio');
+    audio.src = window.URL.createObjectURL(blob);
+    audio.play();
+    console.log("recieved audio")
+});
