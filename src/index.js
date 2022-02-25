@@ -94,7 +94,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     setInterval(function() {
         mediaRecorder.stop()
         mediaRecorder.start()
-      }, 5000);
+      }, 500);
 
 });
 
