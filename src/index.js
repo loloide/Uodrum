@@ -68,20 +68,20 @@ document.onkeydown = function (event) {
                 y = y + speed
                 break;
         }
-        // switch (event.keyCode) {
-        //     case 37 || 65:
-        //         x = x - speed
-        //         break;
-        //     case 38 || 87:
-        //         y = y - speed
-        //         break;
-        //     case 39 || 68:
-        //         x = x + speed
-        //         break;
-        //     case 40 || 83:
-        //         y = y + speed
-        //         break;
-        // }
+        switch (event.keyCode) {
+             case 37:
+                 alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                 break;
+             case 38:
+                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                 break;
+             case 39:
+                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                 break;
+             case 40:
+                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                 break;
+         }
     }
     else {
         if (x == 0) {
