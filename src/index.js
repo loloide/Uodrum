@@ -149,12 +149,15 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
 socket.on('voice', function(data) {
     objIndex = dots.findIndex((obj => obj.id == data.id));
     distance = Math.hypot(dots[objIndex].x - x, dots[objIndex].y - y)
-        if (distance < 100) {
+        if (distance < 1000) {
             var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
             var audio = document.createElement('audio');
             audio.src = window.URL.createObjectURL(blob);
             
-            if (distance > 50) {
+            if (distance > 500) {
+                audio.volume = 0.01
+            }
+            if (distance > 200 && distance < 500) {
                 audio.volume = 0.5
             }
             audio.play();
