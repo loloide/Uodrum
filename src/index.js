@@ -158,6 +158,7 @@ socket.on('voice', function(data) {
                 audio.volume = 0.5
             }
             audio.play();
+            console.log("hearing")
         }
     
 });
