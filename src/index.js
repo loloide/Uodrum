@@ -142,10 +142,13 @@ socket.on('voice', function(data) {
         var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
         var audio = document.createElement('audio');
         audio.src = window.URL.createObjectURL(blob);
-        
-        if (distance > 50) {
-            audio.volume = 0.3
+        if (distance > 500) {
+            audio.volume = 0.01
+        }
+        if (distance > 200 && distance < 500) {
+            audio.volume = 0.5
         }
         audio.play();
+        
     }
 });
