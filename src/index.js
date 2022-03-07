@@ -5,9 +5,9 @@ var dots = []
 var speed = 1
 
 var pos = {
-    id:socket.id,
-    x:x,
-    y:y
+    id: socket.id,
+    x: x,
+    y: y
 }
 
 socket.emit('usr', pos)
@@ -106,9 +106,9 @@ document.onkeydown = function (event) {
     }
     
     var pos = {
-        id:socket.id,
-        x:x,
-        x:y
+        id: socket.id,
+        x: x,
+        y: y
     }
     socket.emit('usr', pos)
 
