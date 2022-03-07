@@ -4,10 +4,19 @@ var y = 350
 var dots = []
 var speed = 1
 
+var pos = {
+    id:socket.id,
+    x:x,
+    x:y
+}
+
+sockets.emit('usr', pos)
+
 function setup() {
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
     img = loadImage("/background.png")
+
     
     socket.on('usr', function(data) {
         if(dots.some(dot => dot.id === data.id)){
@@ -96,7 +105,12 @@ document.onkeydown = function (event) {
         }
     }
     
-    
+    var pos = {
+        id:socket.id,
+        x:x,
+        x:y
+    }
+    sockets.emit('usr', pos)
 
     const xshow = document.getElementById("xshow").innerHTML = "x: " + x
     const yshow = document.getElementById("yshow").innerHTML = "y: " + y
@@ -116,9 +130,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
         var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
         var data = {
             b:blob,
-            id: socket.id,
-            x: x,
-            y: y
+            id: socket.id
         };
         socket.emit('voice', data);
     };

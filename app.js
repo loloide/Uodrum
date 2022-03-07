@@ -33,9 +33,12 @@ var io = require('socket.io')(server, {
     socket.on('voice', function(data) {
       // can choose to broadcast it to whoever you want
       socket.broadcast.emit('voice', data);
-      io.sockets.emit('usr', data) 
     });
     
+    socket.on('usr', function(data){
+      io.sockets.emit('usr', data)
+    })
+
     socket.on('disconnect', function() {
       console.log("Client has disconnected " + socket.id);
       io.sockets.emit('disusr', socket.id)
