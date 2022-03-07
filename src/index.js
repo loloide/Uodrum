@@ -10,7 +10,7 @@ var pos = {
     x:y
 }
 
-sockets.emit('usr', pos)
+socket.emit('usr', pos)
 
 function setup() {
     var canvas = createCanvas(1900, 700);
@@ -110,7 +110,7 @@ document.onkeydown = function (event) {
         x:x,
         x:y
     }
-    sockets.emit('usr', pos)
+    socket.emit('usr', pos)
 
     const xshow = document.getElementById("xshow").innerHTML = "x: " + x
     const yshow = document.getElementById("yshow").innerHTML = "y: " + y
