@@ -7,10 +7,9 @@ var speed = 1
 function setup() {
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
-    frameRate(30)
-    img = loadImage("/background.png")    
+    img = loadImage("/background.png")
+    
     socket.on('usr', function(data) {
-
         if(dots.some(dot => dot.id === data.id)){
             objIndex = dots.findIndex((obj => obj.id == data.id));
             dots[objIndex].x = data.x
@@ -149,6 +148,5 @@ socket.on('voice', function(data) {
             audio.volume = 0.5
         }
         audio.play();
-        
     }
 });
