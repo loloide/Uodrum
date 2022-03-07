@@ -30,16 +30,11 @@ var io = require('socket.io')(server, {
 
     console.log("We have a new client: " + socket.id);
 
-    socket.on('voice', function(blob) {
+    socket.on('voice', function(data) {
       // can choose to broadcast it to whoever you want
-      socket.broadcast.emit('voice', blob);
+      socket.broadcast.emit('voice', data);
+      io.sockets.emit('usr', data) 
     });
-
-    socket.on('usr', function(data) {
-        io.sockets.emit('usr', data) 
-
-      }
-    );
     
     socket.on('disconnect', function() {
       console.log("Client has disconnected " + socket.id);

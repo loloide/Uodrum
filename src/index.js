@@ -8,14 +8,7 @@ function setup() {
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
     frameRate(30)
-    img = loadImage("/background.png")
-    var data = {
-        id: socket.id,
-        x: x,
-        y: y
-    };
-
-    socket.emit('usr', data);
+    img = loadImage("/background.png")    
     socket.on('usr', function(data) {
 
         if(dots.some(dot => dot.id === data.id)){
@@ -104,13 +97,7 @@ document.onkeydown = function (event) {
         }
     }
     
-    var data = {
-        id: socket.id,
-        x: x,
-        y: y
-    };
-
-    socket.emit('usr', data);
+    
 
     const xshow = document.getElementById("xshow").innerHTML = "x: " + x
     const yshow = document.getElementById("yshow").innerHTML = "y: " + y
@@ -128,11 +115,13 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     };
     mediaRecorder.onstop = function(e) {
         var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
-        var datav = {
+        var data = {
             b:blob,
-            id:socket.id
-        }
-        socket.emit('voice', datav);
+            id: socket.id,
+            x: x,
+            y: y
+        };
+        socket.emit('voice', data);
     };
 
     // Start recording
@@ -149,19 +138,14 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
 socket.on('voice', function(data) {
     objIndex = dots.findIndex((obj => obj.id == data.id));
     distance = Math.hypot(dots[objIndex].x - x, dots[objIndex].y - y)
-        if (distance < 1000) {
-            var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
-            var audio = document.createElement('audio');
-            audio.src = window.URL.createObjectURL(blob);
-            
-            if (distance > 500) {
-                audio.volume = 0.01
-            }
-            if (distance > 200 && distance < 500) {
-                audio.volume = 0.5
-            }
-            audio.play();
-            console.log("hearing")
+    if (distance < 100) {
+        var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
+        var audio = document.createElement('audio');
+        audio.src = window.URL.createObjectURL(blob);
+        
+        if (distance > 50) {
+            audio.volume = 0.3
         }
-    
+        audio.play();
+    }
 });
