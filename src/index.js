@@ -4,14 +4,6 @@ var y = 350
 var dots = []
 var speed = 1
 
-var pos = {
-    id: socket.id,
-    x: x,
-    y: y
-}
-
-socket.emit('usr', pos)
-
 function setup() {
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
@@ -162,3 +154,11 @@ socket.on('voice', function(data) {
         audio.play();
     }
 });
+
+var pos = {
+    id: socket.id,
+    x: x,
+    y: y
+}
+
+socket.emit('usr', pos)
