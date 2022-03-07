@@ -12,9 +12,9 @@ function setup() {
     
     socket.on('usr', function(data) {
         if(dots.some(dot => dot.id === data.id)){
-            objIndex = dots.findIndex((obj => obj.id == data.id));
-            dots[objIndex].x = data.x
-            dots[objIndex].y = data.y
+            var index = dots.findIndex((obj => obj.id == data.id));
+            dots[index].x = data.x
+            dots[index].y = data.y
 
         } 
         else {
