@@ -7,7 +7,7 @@ var speed = 1
 var pos = {
     id:socket.id,
     x:x,
-    x:y
+    y:y
 }
 
 socket.emit('usr', pos)
