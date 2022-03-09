@@ -151,7 +151,27 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
 // When the client receives a voice message it will play the sound
 socket.on('voice', function(data) {
     objIndex = dots.findIndex((obj => obj.id == data.id));
-    distance = 0//Math.hypot(dots[objIndex].x - pos.x, dots[objIndex].y - pos.y)
+    function distanceFunction( x1, y1, x2, y2 ) {
+	
+        var 	xs = x2 - x1,
+            ys = y2 - y1;		
+        
+        xs *= xs;
+        ys *= ys;
+         
+        return Math.sqrt( xs + ys );
+    };
+
+    dots.length > 1 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
+
+
+    try {
+        
+    } catch (error) {
+        distance = 100
+    }
+
+
     if (distance < 100) {
         var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
         var audio = document.createElement('audio');
