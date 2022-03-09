@@ -57,6 +57,7 @@ function sendpos() {
         y: y
     };
     socket.emit('usr', data);
+    console.log("sent")
 }
 
 //audio
@@ -150,7 +151,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
 // When the client receives a voice message it will play the sound
 socket.on('voice', function(data) {
     objIndex = dots.findIndex((obj => obj.id == data.id));
-    distance = Math.hypot(dots[objIndex].x - pos.x, dots[objIndex].y - pos.y)
+    distance = 0 //Math.hypot(dots[objIndex].x - pos.x, dots[objIndex].y - pos.y)
     if (distance < 100) {
         var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
         var audio = document.createElement('audio');
@@ -165,10 +166,4 @@ socket.on('voice', function(data) {
     }
 });
 
-var pos = {
-    id: socket.id,
-    x: x,
-    y: y
-}
-
-socket.emit('usr', pos)
+sendpos()
