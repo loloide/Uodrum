@@ -18,12 +18,15 @@ function setup() {
 
         } 
         else {
-            dots.push({
-                id: data.id,
-                x: data.x,
-                y: data.y
-            });
-            console.log(dots)
+            if (data.id != null){
+                dots.push({
+                    id: data.id,
+                    x: data.x,
+                    y: data.y
+                });
+                console.log(dots)
+            }
+            
         }
     })
 }
