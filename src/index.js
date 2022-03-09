@@ -8,7 +8,8 @@ function setup() {
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
     frameRate(30)
-    img = loadImage("/background.png")    
+    img = loadImage("/background.png")  
+    sendpos()  
     socket.on('usr', function(data) {
 
         if(dots.some(dot => dot.id === data.id)){
@@ -33,6 +34,7 @@ socket.on('disusr', function(data) {
 })
 
 socket.on('newusr', function(data) {
+    sendpos()
     console.log("New user: " + data + " connected")
 })
 
@@ -42,6 +44,15 @@ function draw() {
         fill("#ffffff")
         ellipse(value.x, value.y, 10, 10)
     }
+}
+
+function sendpos() {
+    var data = {
+        id: socket.id,
+        x: x,
+        y: y
+    };
+    socket.emit('usr', data);
 }
 
 //audio
@@ -97,7 +108,7 @@ document.onkeydown = function (event) {
         }
     }
     
-    
+    sendpos()
 
     const xshow = document.getElementById("xshow").innerHTML = "x: " + x
     const yshow = document.getElementById("yshow").innerHTML = "y: " + y
@@ -117,9 +128,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
         var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
         var data = {
             b:blob,
-            id: socket.id,
-            x: x,
-            y: y
+            id: socket.id
         };
         socket.emit('voice', data);
     };
