@@ -18,8 +18,9 @@ function setup() {
             dots[index].y = data.y
 
         } 
+        
         else {
-            if (data.id != null){
+            if (data.id !== null){
                 dots.push({
                     id: data.id,
                     x: data.x,
