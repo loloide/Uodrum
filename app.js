@@ -34,6 +34,11 @@ var io = require('socket.io')(server, {
       // can choose to broadcast it to whoever you want
       socket.broadcast.emit('voice', data);
     });
+
+    socket.on('usr', function(data) {
+      io.sockets.emit('usr', data) 
+    }) 
+      
     
     socket.on('usr', function(data){
       io.sockets.emit('usr', data)

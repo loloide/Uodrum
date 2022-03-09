@@ -7,7 +7,14 @@ var speed = 1
 function setup() {
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
+<<<<<<< HEAD
     img = loadImage("/background.png")
+=======
+    frameRate(30)
+    img = loadImage("/background.png")  
+    sendpos()  
+    socket.on('usr', function(data) {
+>>>>>>> 3990f2b989d3c662d067757f25390c794b59ab90
 
     
     socket.on('usr', function(data) {
@@ -36,6 +43,7 @@ socket.on('disusr', function(data) {
 })
 
 socket.on('newusr', function(data) {
+    sendpos()
     console.log("New user: " + data + " connected")
 })
 
@@ -45,6 +53,15 @@ function draw() {
         fill("#ffffff")
         ellipse(value.x, value.y, 10, 10)
     }
+}
+
+function sendpos() {
+    var data = {
+        id: socket.id,
+        x: x,
+        y: y
+    };
+    socket.emit('usr', data);
 }
 
 //audio
@@ -100,12 +117,16 @@ document.onkeydown = function (event) {
         }
     }
     
+<<<<<<< HEAD
     var pos = {
         id: socket.id,
         x: x,
         y: y
     }
     socket.emit('usr', pos)
+=======
+    sendpos()
+>>>>>>> 3990f2b989d3c662d067757f25390c794b59ab90
 
     const xshow = document.getElementById("xshow").innerHTML = "x: " + x
     const yshow = document.getElementById("yshow").innerHTML = "y: " + y
