@@ -1,6 +1,7 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://v-alhalla.herokuapp.com/");
 var x = 1
 var y = 350
+var hex
 var dots = []
 var speed = 1
 
@@ -16,6 +17,7 @@ function setup() {
             var index = dots.findIndex((obj => obj.id == data.id));
             dots[index].x = data.x
             dots[index].y = data.y
+            dots[index].hex = data.hex
 
         } 
 
@@ -24,7 +26,8 @@ function setup() {
                 dots.push({
                     id: data.id,
                     x: data.x,
-                    y: data.y
+                    y: data.y,
+                    hex: data.hex
                 });
                 console.log(dots)
             }
@@ -45,7 +48,9 @@ socket.on('newusr', function(data) {
 function draw() {
     background(img)
     for (let value of dots) {
-        fill("#ffffff")
+        if (value.hex !== undefined){
+            fill(value.hex)
+        }
         ellipse(value.x, value.y, 10, 10)
     }
 }
@@ -54,10 +59,12 @@ function sendpos() {
     var data = {
         id: socket.id,
         x: x,
-        y: y
+        y: y,
+        hex: hex
     };
-    socket.emit('usr', data);
-    console.log("sent")
+
+    socket.emit('usr', data)
+    console.log(data)
 }
 
 //audio
@@ -187,3 +194,23 @@ socket.on('voice', function(data) {
 });
 
 sendpos()
+
+//clolor picker
+var colorWell;
+var defaultColor = "#ffffff";
+
+window.addEventListener("load", startup, false);
+
+function startup() {
+    colorWell = document.querySelector("#colorWell");   
+    colorWell.addEventListener("input", updateAll, false);
+    colorWell.addEventListener("change", updatesend, false);
+}
+
+function updateAll() {
+    hex = colorWell.value;
+}
+
+function updatesend() {
+    sendpos()
+}
