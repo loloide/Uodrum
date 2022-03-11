@@ -1,4 +1,4 @@
-socket = io.connect("http://v-alhalla.herokuapp.com/");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
 var x = 1
 var y = 350
 var hex
