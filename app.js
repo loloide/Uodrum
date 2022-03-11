@@ -15,12 +15,12 @@ function listen() {
 app.use(express.static('src'));
 
 var io = require('socket.io')(server, {
-     cors: {
-       origin: "http://v-alhalla.herokuapp.com/",
-       methods: ["GET", "POST"],
-       transports: ['websocket', 'polling'],
-       credentials: true
-   },
+  //    cors: {
+  //      origin: "http://v-alhalla.herokuapp.com/",
+  //      methods: ["GET", "POST"],
+  //      transports: ['websocket', 'polling'],
+  //      credentials: true
+  //  },
   allowEIO3: true
   });
 
