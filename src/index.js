@@ -84,19 +84,15 @@ addEventListener("keydown", (event) => {
         switch (event.keyCode) {
             case 65:
                 keys.a = true
-                x = x - speed
                 break;
             case 87:
                 keys.w = true 
-                y = y - speed
                 break;
             case 68:
                 keys.d = true
-                x = x + speed
                 break;
             case 83:
                 keys.s = true
-                y = y + speed
                 break;
         }
     }
