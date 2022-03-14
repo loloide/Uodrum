@@ -1,4 +1,4 @@
-socket = io.connect("http://localhost:3000/");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
 var x = 1
 var y = 350
 var hex
@@ -172,11 +172,6 @@ socket.on('voice', function(data) {
     };
 
     dots.length > 1 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
-
-
-
-
-
     
     var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
     var audio = document.createElement('audio');
