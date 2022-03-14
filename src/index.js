@@ -225,7 +225,7 @@ socket.on('voice', function(data) {
         audio.volume = 1
     }
     audio.play();
-    var vol = audio.volume
+    console.log(audio.volume)
 
 });
 
