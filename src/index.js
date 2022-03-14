@@ -1,4 +1,4 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000/");
 var x = 1
 var y = 350
 var hex
@@ -155,6 +155,8 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     }, 500);
 });
 
+
+
 // When the client receives a voice message it will play the sound
 socket.on('voice', function(data) {
     objIndex = dots.findIndex((obj => obj.id == data.id));
@@ -172,25 +174,21 @@ socket.on('voice', function(data) {
     dots.length > 1 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
 
 
-    try {
-        
-    } catch (error) {
-        distance = 100
-    }
 
 
-    if (distance < 100) {
-        var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
-        var audio = document.createElement('audio');
-        audio.src = window.URL.createObjectURL(blob);
-        if (distance > 500) {
-            audio.volume = 0.01
-        }
-        if (distance > 200 && distance < 500) {
-            audio.volume = 0.5
-        }
-        audio.play();
+
+    
+    var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
+    var audio = document.createElement('audio');
+    audio.src = window.URL.createObjectURL(blob);
+    if (distance > 500) {
+        audio.volume = 0.01
     }
+    if (distance > 200 && distance < 500) {
+        audio.volume = 0.5
+    }
+    audio.play();
+
 });
 
 sendpos()
