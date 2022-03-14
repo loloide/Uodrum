@@ -221,6 +221,9 @@ socket.on('voice', function(data) {
     if (distance > 200 && distance < 500) {
         audio.volume = 0.5
     }
+    if (distance < 200) {
+        audio.volume = 1
+    }
     audio.play();
 
 });
