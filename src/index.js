@@ -64,7 +64,6 @@ function sendpos() {
     };
 
     socket.emit('usr', data)
-    console.log(data)
 }
 
 //audio
