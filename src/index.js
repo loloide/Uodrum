@@ -1,4 +1,4 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000/");
 var x = 1
 var y = 350
 var hex
@@ -56,6 +56,10 @@ function draw() {
 }
 
 function sendpos() {
+    if (keys['w'] == true) { y = y - speed }
+    if (keys['a'] == true) { x = x - speed }
+    if (keys['s'] == true) { y = y + speed }
+    if (keys['d'] == true) { x = x + speed }
     var data = {
         id: socket.id,
         x: x,
@@ -66,38 +70,76 @@ function sendpos() {
     socket.emit('usr', data)
 }
 
-//audio
-document.onkeydown = function (event) {
+
+//movement
+var keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+  };
+
+addEventListener("keydown", (event) => {
     if (x > 0 && x < 1900 && y > 0 && y < 700) {
         switch (event.keyCode) {
             case 65:
+                keys.a = true
                 x = x - speed
                 break;
             case 87:
+                keys.w = true 
                 y = y - speed
                 break;
             case 68:
+                keys.d = true
                 x = x + speed
                 break;
             case 83:
+                keys.s = true
                 y = y + speed
                 break;
         }
-        switch (event.keyCode) {
-             case 37:
-                 alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                 break;
-             case 38:
-                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                 break;
-             case 39:
-                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                 break;
-             case 40:
-                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                 break;
-         }
     }
+});
+
+addEventListener("keyup", (event) => {
+    switch (event.keyCode) {
+        case 65:
+            keys.a = false
+            break;
+        case 87:
+            keys.w = false 
+            break;
+        case 68:
+            keys.d = false
+            break;
+        case 83:
+            keys.s = false
+            break;
+    }
+});
+
+
+
+document.onkeydown = function (event) {
+    if (x > 0 && x < 1900 && y > 0 && y < 700) {
+        switch (event.keyCode) {
+            case 37:
+                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                break;
+            case 38:
+            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                break;
+            case 39:
+            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                break;
+            case 40:
+            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+                break;
+        }
+    }
+    
+    
     else {
         if (x == 0) {
             x = 1
@@ -126,6 +168,8 @@ document.onkeydown = function (event) {
     const numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
 };
 
+
+//audio
 var constraints = { audio: true };
 navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     var mediaRecorder = new MediaRecorder(mediaStream);
