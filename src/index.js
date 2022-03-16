@@ -1,5 +1,5 @@
-//socket = io.connect("https://v-alhalla.herokuapp.com/");
-socket = io.connect("http://localhost:3000");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
+//socket = io.connect("http://localhost:3000");
 var x = 1
 var y = 350
 var hex
@@ -7,6 +7,7 @@ var dots = []
 var speed = 1
 var mic
 var micLevel
+
 
 function setup() {
     mic = new p5.AudioIn();
