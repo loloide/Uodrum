@@ -1,24 +1,28 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 1
 var y = 350
 var hex
 var dots = []
 var speed = 1
+var mic
+var micLevel
 
 function setup() {
+    mic = new p5.AudioIn();
+    mic.start();
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
     frameRate(30)
     img = loadImage("/background.png")  
     sendpos() 
-    
+   
     socket.on('usr', function(data) {
         if(dots.some(dot => dot.id === data.id)){
             var index = dots.findIndex((obj => obj.id == data.id));
             dots[index].x = data.x
             dots[index].y = data.y
             dots[index].hex = data.hex
-
         } 
 
         else {
@@ -38,6 +42,7 @@ function setup() {
  
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
+    sendpos()
 })
 
 socket.on('newusr', function(data) {
@@ -70,14 +75,13 @@ function sendpos() {
     socket.emit('usr', data)
 }
 
-
 //movement
 var keys = {
     w: false,
     a: false,
     s: false,
     d: false
-  };
+};
 
 addEventListener("keydown", (event) => {
     if (x > 0 && x < 1900 && y > 0 && y < 700) {
@@ -115,14 +119,12 @@ addEventListener("keyup", (event) => {
     }
 });
 
-
-
 document.onkeydown = function (event) {
     if (x > 0 && x < 1900 && y > 0 && y < 700) {
         switch (event.keyCode) {
             case 37:
-                alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                break;
+            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
+            break;
             case 38:
             alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
                 break;
@@ -150,7 +152,7 @@ document.onkeydown = function (event) {
             y = 699
         }
         
-        if (x < 2 && y > 300 && y < 400) {
+        if (x < 1 && y > 300 && y < 400) {
             if (confirm("Get out of V-alhalla?")) {
                 close();
             }
@@ -167,6 +169,7 @@ document.onkeydown = function (event) {
 
 //audio
 var constraints = { audio: true };
+
 navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     var mediaRecorder = new MediaRecorder(mediaStream);
     mediaRecorder.onstart = function(e) {
@@ -177,11 +180,16 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     };
     mediaRecorder.onstop = function(e) {
         var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
+        micLevel = mic.getLevel();
+
         var data = {
             b:blob,
             id: socket.id
         };
-        socket.emit('voice', data);
+        if (micLevel > 0.01    ) {
+            socket.emit('voice', data);
+        }
+        
     };
 
     // Start recording
@@ -225,10 +233,7 @@ socket.on('voice', function(data) {
         audio.volume = 1
     }
     audio.play();
-
 });
-
-sendpos()
 
 //clolor picker
 var colorWell;
@@ -239,13 +244,11 @@ window.addEventListener("load", startup, false);
 function startup() {
     colorWell = document.querySelector("#colorWell");   
     colorWell.addEventListener("input", updateAll, false);
-    colorWell.addEventListener("change", updatesend, false);
+    colorWell.addEventListener("change", sendpos, false);
 }
 
 function updateAll() {
     hex = colorWell.value;
 }
 
-function updatesend() {
-    sendpos()
-}
+console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")
