@@ -8,7 +8,6 @@ var speed = 1
 var mic
 var micLevel
 
-
 function setup() {
     mic = new p5.AudioIn();
     mic.start();
