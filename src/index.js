@@ -67,6 +67,7 @@ function draw() {
         }
         ellipse(value.x, value.y, 10, 10)
     }
+    
 }
 
 function sendpos() {
@@ -170,9 +171,9 @@ document.onkeydown = function (event) {
     
     sendpos()
 
-    const xshow = document.getElementById("xshow").innerHTML = "x: " + x
-    const yshow = document.getElementById("yshow").innerHTML = "y: " + y
-    const numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
+    var xshow = document.getElementById("xshow").innerHTML = "x: " + x
+    var yshow = document.getElementById("yshow").innerHTML = "y: " + y
+    var numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
 };
 
 
