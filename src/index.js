@@ -1,5 +1,5 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 1
 var y = 350
 var hex
@@ -24,6 +24,7 @@ function setup() {
             dots[index].x = data.x
             dots[index].y = data.y
             dots[index].hex = data.hex
+            
         } 
 
         else {
@@ -32,7 +33,8 @@ function setup() {
                     id: data.id,
                     x: data.x,
                     y: data.y,
-                    hex: data.hex
+                    hex: data.hex,
+                    talking: false
                 });
                 console.log(dots)
             }
@@ -54,8 +56,14 @@ socket.on('newusr', function(data) {
 function draw() {
     background(img)
     for (let value of dots) {
+        
         if (value.hex !== undefined){
             fill(value.hex)
+        }
+        if(value.talking == true) {
+            stroke("#49fc03")
+        } else {
+            stroke("#000000")
         }
         ellipse(value.x, value.y, 10, 10)
     }
@@ -218,7 +226,7 @@ socket.on('voice', function(data) {
          
         return Math.sqrt( xs + ys );
     };
-
+    dots[objIndex].talking = true
     dots.length > 1 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
     
     var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
@@ -234,6 +242,9 @@ socket.on('voice', function(data) {
         audio.volume = 1
     }
     audio.play();
+    audio.addEventListener("ended", function() {
+        dots[objIndex].talking = false
+    })
 });
 
 //clolor picker
