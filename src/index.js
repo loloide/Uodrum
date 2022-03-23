@@ -1,12 +1,19 @@
 socket = io.connect("https://v-alhalla.herokuapp.com/");
 //socket = io.connect("http://localhost:3000");
-var x = 1
+var x = 5
 var y = 350
 var hex
 var dots = []
 var speed = 1
 var mic
 var micLevel
+
+
+if (localStorage != 0) {
+    x = parseInt(localStorage.x)
+    y = parseInt(localStorage.y)
+}
+
 
 function setup() {
     userStartAudio()
@@ -42,7 +49,7 @@ function setup() {
         }
     })
 }
- 
+
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
     sendpos()
@@ -81,8 +88,10 @@ function sendpos() {
         y: y,
         hex: hex
     };
-
     socket.emit('usr', data)
+
+    localStorage.setItem("x", x)
+    localStorage.setItem("y", y)
 }
 
 //movement
@@ -249,7 +258,8 @@ socket.on('voice', function(data) {
 
 //clolor picker
 var colorWell;
-var defaultColor = "#ffffff";
+
+var defaultColor = hex;
 
 window.addEventListener("load", startup, false);
 
@@ -257,11 +267,18 @@ function startup() {
     colorWell = document.querySelector("#colorWell");   
     colorWell.addEventListener("input", updateAll, false);
     colorWell.addEventListener("change", sendpos, false);
-    hex = "#ffffff"
+    if (localStorage.hex) {
+        hex = localStorage.getItem("hex")
+    } else {
+        hex = "#ffffff"
+    }
+    colorWell.value = hex
+    
 }
 
 function updateAll() {
     hex = colorWell.value;
+    localStorage.setItem("hex", hex)
 }
 
 console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")
