@@ -10,9 +10,12 @@ var micLevel
 
 
 if (localStorage != 0) {
-    x = parseInt(localStorage.x)
-    y = parseInt(localStorage.y)
-}
+    if (localStorage.x != null && localStorage.y != null) {
+        x = parseInt(localStorage.x)
+        y = parseInt(localStorage.y)
+    }
+    
+}  
 
 
 function setup() {
