@@ -257,6 +257,7 @@ function startup() {
     colorWell = document.querySelector("#colorWell");   
     colorWell.addEventListener("input", updateAll, false);
     colorWell.addEventListener("change", sendpos, false);
+    hex = "#ffffff"
 }
 
 function updateAll() {
