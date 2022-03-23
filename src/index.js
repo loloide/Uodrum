@@ -1,5 +1,5 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 1
 var y = 350
 var hex
@@ -9,6 +9,7 @@ var mic
 var micLevel
 
 function setup() {
+    userStartAudio()
     mic = new p5.AudioIn();
     mic.start();
     var canvas = createCanvas(1900, 700);
@@ -190,7 +191,6 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     mediaRecorder.onstop = function(e) {
         var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
         micLevel = mic.getLevel();
-
         var data = {
             b:blob,
             id: socket.id
