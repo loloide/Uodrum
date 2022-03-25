@@ -1,5 +1,5 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 5
 var y = 350
 var hex
@@ -14,7 +14,6 @@ if (localStorage != 0) {
         x = parseInt(localStorage.x)
         y = parseInt(localStorage.y)
     }
-    
 }  
 
 
@@ -95,6 +94,14 @@ function sendpos() {
 
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
+}
+
+function tweet(text) {
+    var data = {
+        id: socket.id,
+        tweet: text
+    }
+    socket.emit("tweet", data)
 }
 
 //movement
