@@ -1,11 +1,8 @@
-var express = require('express');
-var Twit = require('twit')
+var express = require('express')
 var config = require('./config')
 var app = express();
 
 var server = app.listen(process.env.PORT || 3000, listen);
-
-var T = new Twit(config)
 
 function listen() {
   var host = "localhost"
@@ -51,13 +48,7 @@ var io = require('socket.io')(server, {
     });
 
     socket.on('tweet', function(data) {
-      var tweet = {
-        status: data.id + " Said: \n" + data.tweet
-      }
-      function tweeted(err, response) {
-        console.log(err)
-      }
-      T.post('statuses/update', tweet, tweeted)
+      console.log("tweet")
     })
   }
 );
