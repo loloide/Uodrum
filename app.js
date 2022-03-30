@@ -57,7 +57,7 @@ var io = require('socket.io')(server, {
     });
 
     socket.on('tweet', function(data) {
-      userClient.v2.tweet(data.tweet)
+      userClient.v2.tweet(data.id + " says: \n" + data.tweet)
       console.log("user: " + data.id + " tweeted: '" + data.tweet + "'")
     })
   }
