@@ -1,8 +1,10 @@
 var express = require('express')
-var config = require('./config')
+const { TwitterApi } = require('twitter-api-v2');
 var app = express();
 
 var server = app.listen(process.env.PORT || 3000, listen);
+
+
 
 function listen() {
   var host = "localhost"
@@ -11,6 +13,13 @@ function listen() {
 }
   
 app.use(express.static('src'));
+
+const userClient = new TwitterApi({
+  appKey: process.env.APP_KEY,
+  appSecret: process.env.APP_KEY_SECRET,
+  accessToken: process.env.ACCESS_TOKEN,
+  accessSecret: process.env.ACCESS_TOKEN_SECRET,
+});
 
 var io = require('socket.io')(server, {
   //    cors: {
@@ -48,7 +57,8 @@ var io = require('socket.io')(server, {
     });
 
     socket.on('tweet', function(data) {
-      console.log("tweet")
+      userClient.v2.tweet(data.tweet)
+      console.log("user: " + data.id + " tweeted: '" + data.tweet + "'")
     })
   }
 );
