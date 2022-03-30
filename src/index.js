@@ -127,6 +127,10 @@ addEventListener("keydown", (event) => {
             case 83:
                 keys.s = true
                 break;
+            case 32:
+                if (x > 940 && x < 960 && y > 0 && y < 20) {
+                    
+                }
         }
     }
 });
