@@ -1,13 +1,16 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 5
 var y = 350
-var hex
+
 var dots = []
 var speed = 1
 var mic
 var micLevel
 
+var chara
+var charb
+var character = "b"
 
 if (localStorage != 0) {
     if (localStorage.x != null && localStorage.y != null) {
@@ -16,6 +19,10 @@ if (localStorage != 0) {
     }
 }  
 
+function preload() {
+    chara = loadAnimation('sprites/standinga0.png', 'sprites/standinga1.png');
+    charb = loadAnimation('sprites/standingb0.png', 'sprites/standingb1.png')
+}
 
 function setup() {
     userStartAudio()
@@ -23,16 +30,16 @@ function setup() {
     mic.start();
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
-    frameRate(30)
+    frameRate(60)
     img = loadImage("/background.png")  
     sendpos() 
-   
+    updateInfo()
     socket.on('usr', function(data) {
         if(dots.some(dot => dot.id === data.id)){
             var index = dots.findIndex((obj => obj.id == data.id));
             dots[index].x = data.x
             dots[index].y = data.y
-            dots[index].hex = data.hex
+            dots[index].character = data.character
             
         } 
 
@@ -42,7 +49,7 @@ function setup() {
                     id: data.id,
                     x: data.x,
                     y: data.y,
-                    hex: data.hex,
+                    character: data.character,
                     talking: false
                 });
                 console.log(dots)
@@ -66,15 +73,25 @@ function draw() {
     background(img)
     for (let value of dots) {
         
-        if (value.hex !== undefined){
-            fill(value.hex)
-        }
+        // if (value.hex !== undefined){
+        //     fill(value.hex)
+        // }
         if(value.talking == true) {
-            stroke("#49fc03")
+            noStroke()
+            fill(0,255,0, 0.25)
+            ellipse(value.x,value.y, 10,10)
         } else {
-            stroke("#000000")
+            
         }
-        ellipse(value.x, value.y, 10, 10)
+        switch(value.character) {
+            case 'a':
+                animation(chara, value.x, value.y);
+                break;
+            case 'b':
+                animation(charb, value.x, value.y);
+                break;
+        }
+        
     }
     
 }
@@ -88,7 +105,7 @@ function sendpos() {
         id: socket.id,
         x: x,
         y: y,
-        hex: hex
+        character: character
     };
     socket.emit('usr', data)
 
@@ -102,6 +119,12 @@ function tweet(text) {
         tweet: text
     }
     socket.emit("tweet", data)
+}
+
+function updateInfo() {
+    var xshow = document.getElementById("xshow").innerHTML = "x: " + x
+    var yshow = document.getElementById("yshow").innerHTML = "y: " + y
+    var numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
 }
 
 //movement
@@ -129,8 +152,9 @@ addEventListener("keydown", (event) => {
                 break;
             case 32:
                 if (x > 940 && x < 960 && y > 0 && y < 20) {
-                    
-                }
+                    const tweetinput = document.getElementById("tweet-input")
+                    tweetinput.style.visibility = "visible"
+                } 
         }
     }
 });
@@ -194,9 +218,7 @@ document.onkeydown = function (event) {
     
     sendpos()
 
-    var xshow = document.getElementById("xshow").innerHTML = "x: " + x
-    var yshow = document.getElementById("yshow").innerHTML = "y: " + y
-    var numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
+    updateInfo()
 };
 
 
@@ -270,29 +292,38 @@ socket.on('voice', function(data) {
     })
 });
 
-//clolor picker
-var colorWell;
 
-var defaultColor = hex;
-
-window.addEventListener("load", startup, false);
-
-function startup() {
-    colorWell = document.querySelector("#colorWell");   
-    colorWell.addEventListener("input", updateAll, false);
-    colorWell.addEventListener("change", sendpos, false);
-    if (localStorage.hex) {
-        hex = localStorage.getItem("hex")
+function changeChar() {
+    if (character == "a") {
+        character = "b"
     } else {
-        hex = "#ffffff"
+        character = "a"
     }
-    colorWell.value = hex
+    sendpos()
+}
+// //clolor picker
+// var colorWell;
+
+// var defaultColor = hex;
+
+// window.addEventListener("load", startup, false);
+
+// function startup() {
+//     colorWell = document.querySelector("#colorWell");   
+//     colorWell.addEventListener("input", updateAll, false);
+//     colorWell.addEventListener("change", sendpos, false);
+//     if (localStorage.hex) {
+//         hex = localStorage.getItem("hex")
+//     } else {
+//         hex = "#ffffff"
+//     }
+//     colorWell.value = hex
     
-}
+// }
 
-function updateAll() {
-    hex = colorWell.value;
-    localStorage.setItem("hex", hex)
-}
+// function updateAll() {
+//     hex = colorWell.value;
+//     localStorage.setItem("hex", hex)
+// }
 
-console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")
+console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   

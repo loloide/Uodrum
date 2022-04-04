@@ -12,11 +12,11 @@
         <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/addons/p5.sound.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/molleindustria/p5.play/lib/p5.play.js"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Ubuntu&display=swap" rel="stylesheet"> 
-
     </head>
     <body>
         <a id="valhalla-title">V-alhalla</a>
@@ -74,12 +74,15 @@
                 </div>
             </div>
             <br>
-            <div id="colorinp">
+            <!-- <div id="colorinp">
                 <label for="colorWell">Color:</label>
                 <input type="color" id="colorWell">
-            </div>
+            </div> -->
+            <button onclick="changeChar()">change char</button>
         </div>
-
+        <div>
+            <input class="tweet-input" id="tweet-input" type="text" style="visibility: hidden;">
+        </div>
         <footer id="footer">
             <a target="_blank" href="https://github.com/loloide" style="color: #e4e4e4; text-decoration: none;">loloide - </a> 
             <a target="_blank" href="https://github.com/loloide/V-alhalla" style="color: #e4e4e4; text-decoration: none;">
