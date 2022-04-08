@@ -1,13 +1,25 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 var x = 5
 var y = 350
-var hex
 var dots = []
-var speed = 1
+var speed = 2
 var mic
 var micLevel
+var facing = "center"
+var character = "b"
+var acenter
+var bcenter
+var bright
+var bleft
+var sprites
 
+
+if (localStorage.character) {
+    character = localStorage.getItem("character")
+} else {
+    character = "a"
+}  
 
 if (localStorage != 0) {
     if (localStorage.x != null && localStorage.y != null) {
@@ -16,24 +28,32 @@ if (localStorage != 0) {
     }
 }  
 
+function preload() {
+    acenter = loadAnimation('sprites/myon0.png', 'sprites/myon1.png', 'sprites/myon2.png', 'sprites/myon3.png');
+    bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
+    bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
+    bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
+}
 
 function setup() {
+    sprites = new Group();
+    noSmooth()
     userStartAudio()
     mic = new p5.AudioIn();
     mic.start();
     var canvas = createCanvas(1900, 700);
     canvas.parent("canvasDiv")
-    frameRate(30)
+    frameRate(60)
     img = loadImage("/background.png")  
     sendpos() 
-   
+    updateInfo()
     socket.on('usr', function(data) {
         if(dots.some(dot => dot.id === data.id)){
             var index = dots.findIndex((obj => obj.id == data.id));
             dots[index].x = data.x
             dots[index].y = data.y
-            dots[index].hex = data.hex
-            
+            dots[index].character = data.character
+            dots[index].facing = data.facing
         } 
 
         else {
@@ -42,8 +62,9 @@ function setup() {
                     id: data.id,
                     x: data.x,
                     y: data.y,
-                    hex: data.hex,
-                    talking: false
+                    character: data.character,
+                    talking: false,
+                    facing: data.facing
                 });
                 console.log(dots)
             }
@@ -51,6 +72,9 @@ function setup() {
         }
     })
 }
+
+
+
 
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
@@ -66,42 +90,60 @@ function draw() {
     background(img)
     for (let value of dots) {
         
-        if (value.hex !== undefined){
-            fill(value.hex)
-        }
         if(value.talking == true) {
-            stroke("#49fc03")
-        } else {
-            stroke("#000000")
+            noStroke()
+            fill(255,255,0, 100)
+            ellipse(value.x,value.y, 10,10)
         }
-        ellipse(value.x, value.y, 10, 10)
+        var char = createSprite(value.x, value.y, 32,32)
+        var anim = value.character + value.facing
+        char.addAnimation('acenter', acenter)
+        char.addAnimation('bcenter', bcenter)
+        char.addAnimation('bright', bright)
+        char.addAnimation('bleft', bleft)
+        char.changeAnimation(anim)
+        char.scale = 0.5;
+        drawSprite(char)
     }
     
 }
 
+
+
 function sendpos() {
-    if (keys['w'] == true) { y = y - speed }
-    if (keys['a'] == true) { x = x - speed }
-    if (keys['s'] == true) { y = y + speed }
-    if (keys['d'] == true) { x = x + speed }
+    if (keys['w'] == true) { y = y - speed; facing = "center"}
+    if (keys['a'] == true) { x = x - speed; facing = "left"} 
+    if (keys['s'] == true) { y = y + speed; facing = "center"}
+    if (keys['d'] == true) { x = x + speed; facing = "right"} 
     var data = {
         id: socket.id,
         x: x,
         y: y,
-        hex: hex
+        character: character,
+        facing: facing
     };
     socket.emit('usr', data)
 
+
+    localStorage.setItem("character", character)
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
 }
 
-function tweet(text) {
+function tweet() {
+    var val = document.querySelector('#tweet-input').value;
+    console.log("tweeted: " + val)
     var data = {
         id: socket.id,
-        tweet: text
+        tweet: val
     }
     socket.emit("tweet", data)
+}
+
+function updateInfo() {
+    var xshow = document.getElementById("xshow").innerHTML = "x: " + x
+    var yshow = document.getElementById("yshow").innerHTML = "y: " + y
+    var numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
 }
 
 //movement
@@ -129,8 +171,14 @@ addEventListener("keydown", (event) => {
                 break;
             case 32:
                 if (x > 940 && x < 960 && y > 0 && y < 20) {
-                    
-                }
+                    const tweetinput = document.getElementById("tweet-input")
+                    tweetinput.style.visibility = "visible"
+                    tweetinput.addEventListener("keydown", function(event) {
+                        if (event.keyCode == 13){
+                            tweet()
+                        }
+                    });
+                } 
         }
     }
 });
@@ -150,6 +198,8 @@ addEventListener("keyup", (event) => {
             keys.s = false
             break;
     }
+    facing = "center"
+    sendpos()
 });
 
 document.onkeydown = function (event) {
@@ -194,9 +244,7 @@ document.onkeydown = function (event) {
     
     sendpos()
 
-    var xshow = document.getElementById("xshow").innerHTML = "x: " + x
-    var yshow = document.getElementById("yshow").innerHTML = "y: " + y
-    var numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
+    updateInfo()
 };
 
 
@@ -270,29 +318,14 @@ socket.on('voice', function(data) {
     })
 });
 
-//clolor picker
-var colorWell;
 
-var defaultColor = hex;
-
-window.addEventListener("load", startup, false);
-
-function startup() {
-    colorWell = document.querySelector("#colorWell");   
-    colorWell.addEventListener("input", updateAll, false);
-    colorWell.addEventListener("change", sendpos, false);
-    if (localStorage.hex) {
-        hex = localStorage.getItem("hex")
+function changeChar() {
+    if (character == "a") {
+        character = "b"
     } else {
-        hex = "#ffffff"
+        character = "a"
     }
-    colorWell.value = hex
-    
+    sendpos()
 }
 
-function updateAll() {
-    hex = colorWell.value;
-    localStorage.setItem("hex", hex)
-}
-
-console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")
+console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   
