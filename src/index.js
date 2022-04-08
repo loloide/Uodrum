@@ -1,6 +1,6 @@
 socket = io.connect("https://v-alhalla.herokuapp.com/");
 //socket = io.connect("http://localhost:3000");
-const tweetinput = document.getElementById("tweet-input")
+
 var x = 5
 var y = 350
 var dots = []
@@ -172,6 +172,7 @@ addEventListener("keydown", (event) => {
                 break;
             case 32:
                 if (x > 940 && x < 960 && y > 0 && y < 20) {
+                    const tweetinput = document.getElementById("tweet-input")
                     tweetinput.style.visibility = "visible"
                     tweetinput.addEventListener("keydown", function(event) {
                         if (event.keyCode == 13){
@@ -179,6 +180,7 @@ addEventListener("keydown", (event) => {
                         }
                     });
                 } else {
+                    const tweetinput = document.getElementById("tweet-input")
                     tweetinput.style.visibility = "hidden"
                 }
         }
