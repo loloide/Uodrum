@@ -2,15 +2,24 @@
 socket = io.connect("http://localhost:3000");
 var x = 5
 var y = 350
-
 var dots = []
-var speed = 1
+var speed = 2
 var mic
 var micLevel
-
-var chara
-var charb
+var facing = "center"
 var character = "b"
+var acenter
+var bcenter
+var bright
+var bleft
+var sprites
+
+
+if (localStorage.character) {
+    character = localStorage.getItem("character")
+} else {
+    character = "a"
+}  
 
 if (localStorage != 0) {
     if (localStorage.x != null && localStorage.y != null) {
@@ -20,11 +29,15 @@ if (localStorage != 0) {
 }  
 
 function preload() {
-    chara = loadAnimation('sprites/standinga0.png', 'sprites/standinga1.png');
-    charb = loadAnimation('sprites/standingb0.png', 'sprites/standingb1.png')
+    acenter = loadAnimation('sprites/myon0.png', 'sprites/myon1.png', 'sprites/myon2.png', 'sprites/myon3.png');
+    bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
+    bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
+    bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
 }
 
 function setup() {
+    sprites = new Group();
+    noSmooth()
     userStartAudio()
     mic = new p5.AudioIn();
     mic.start();
@@ -40,7 +53,7 @@ function setup() {
             dots[index].x = data.x
             dots[index].y = data.y
             dots[index].character = data.character
-            
+            dots[index].facing = data.facing
         } 
 
         else {
@@ -50,7 +63,8 @@ function setup() {
                     x: data.x,
                     y: data.y,
                     character: data.character,
-                    talking: false
+                    talking: false,
+                    facing: data.facing
                 });
                 console.log(dots)
             }
@@ -58,6 +72,9 @@ function setup() {
         }
     })
 }
+
+
+
 
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
@@ -73,50 +90,52 @@ function draw() {
     background(img)
     for (let value of dots) {
         
-        // if (value.hex !== undefined){
-        //     fill(value.hex)
-        // }
         if(value.talking == true) {
             noStroke()
-            fill(0,255,0, 0.25)
+            fill(255,255,0, 100)
             ellipse(value.x,value.y, 10,10)
-        } else {
-            
         }
-        switch(value.character) {
-            case 'a':
-                animation(chara, value.x, value.y);
-                break;
-            case 'b':
-                animation(charb, value.x, value.y);
-                break;
-        }
-        
+        var char = createSprite(value.x, value.y, 32,32)
+        var anim = value.character + value.facing
+        char.addAnimation('acenter', acenter)
+        char.addAnimation('bcenter', bcenter)
+        char.addAnimation('bright', bright)
+        char.addAnimation('bleft', bleft)
+        char.changeAnimation(anim)
+        char.scale = 0.5;
+        drawSprite(char)
     }
     
 }
 
+
+
 function sendpos() {
-    if (keys['w'] == true) { y = y - speed }
-    if (keys['a'] == true) { x = x - speed }
-    if (keys['s'] == true) { y = y + speed }
-    if (keys['d'] == true) { x = x + speed }
+    if (keys['w'] == true) { y = y - speed; facing = "center"}
+    if (keys['a'] == true) { x = x - speed; facing = "left"} 
+    if (keys['s'] == true) { y = y + speed; facing = "center"}
+    if (keys['d'] == true) { x = x + speed; facing = "right"} 
     var data = {
         id: socket.id,
         x: x,
         y: y,
-        character: character
+        character: character,
+        facing: facing
     };
     socket.emit('usr', data)
 
+
+    localStorage.setItem("character", character)
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
 }
 
-function tweet(text) {
+function tweet() {
+    var val = document.querySelector('#tweet-input').value;
+    console.log("tweeted: " + val)
     var data = {
         id: socket.id,
-        tweet: text
+        tweet: val
     }
     socket.emit("tweet", data)
 }
@@ -154,6 +173,11 @@ addEventListener("keydown", (event) => {
                 if (x > 940 && x < 960 && y > 0 && y < 20) {
                     const tweetinput = document.getElementById("tweet-input")
                     tweetinput.style.visibility = "visible"
+                    tweetinput.addEventListener("keydown", function(event) {
+                        if (event.keyCode == 13){
+                            tweet()
+                        }
+                    });
                 } 
         }
     }
@@ -174,6 +198,8 @@ addEventListener("keyup", (event) => {
             keys.s = false
             break;
     }
+    facing = "center"
+    sendpos()
 });
 
 document.onkeydown = function (event) {
@@ -301,29 +327,5 @@ function changeChar() {
     }
     sendpos()
 }
-// //clolor picker
-// var colorWell;
-
-// var defaultColor = hex;
-
-// window.addEventListener("load", startup, false);
-
-// function startup() {
-//     colorWell = document.querySelector("#colorWell");   
-//     colorWell.addEventListener("input", updateAll, false);
-//     colorWell.addEventListener("change", sendpos, false);
-//     if (localStorage.hex) {
-//         hex = localStorage.getItem("hex")
-//     } else {
-//         hex = "#ffffff"
-//     }
-//     colorWell.value = hex
-    
-// }
-
-// function updateAll() {
-//     hex = colorWell.value;
-//     localStorage.setItem("hex", hex)
-// }
 
 console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   
