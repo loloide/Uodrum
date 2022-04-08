@@ -170,19 +170,19 @@ addEventListener("keydown", (event) => {
             case 83:
                 keys.s = true
                 break;
-            case 32:
-                if (x > 940 && x < 960 && y > 0 && y < 20) {
-                    const tweetinput = document.getElementById("tweet-input")
-                    tweetinput.style.visibility = "visible"
-                    tweetinput.addEventListener("keydown", function(event) {
-                        if (event.keyCode == 13){
-                            tweet()
-                        }
-                    });
-                } else {
-                    const tweetinput = document.getElementById("tweet-input")
-                    tweetinput.style.visibility = "hidden"
+            
+        }
+        if (x > 940 && x < 960 && y > 0 && y < 20) {
+            const tweetinput = document.getElementById("tweet-input")
+            tweetinput.style.visibility = "visible"
+            tweetinput.addEventListener("keydown", function(event) {
+                if (event.keyCode == 13){
+                    tweet()
                 }
+            });
+        } else {
+            const tweetinput = document.getElementById("tweet-input")
+            tweetinput.style.visibility = "hidden"
         }
     }
 });
