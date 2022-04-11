@@ -1,5 +1,5 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 
 var x = 5
 var y = 350
@@ -13,7 +13,6 @@ var acenter
 var bcenter
 var bright
 var bleft
-var sprites
 
 
 if (localStorage.character) {
@@ -34,18 +33,22 @@ function preload() {
     bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
     bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
     bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
+    
 }
 
 function setup() {
-    sprites = new Group();
-    noSmooth()
+    
+    frameRate(15)
+    
+    
+    var canvas = createCanvas(1900, 700);
     userStartAudio()
     mic = new p5.AudioIn();
     mic.start();
-    var canvas = createCanvas(1900, 700);
+    noSmooth()
     canvas.parent("canvasDiv")
-    frameRate(60)
     img = loadImage("/background.png")  
+    background(img)
     sendpos() 
     updateInfo()
     socket.on('usr', function(data) {
@@ -71,6 +74,27 @@ function setup() {
             }
             
         }
+        background(img)
+        for (let value of dots) {
+            
+            if(value.talking == true) {
+                noStroke()
+                fill(255,255,0, 100)
+                ellipse(value.x,value.y, 10,10)
+            }
+            var person = createSprite(value.x, value.y, 32,32)
+            var anim = value.character + value.facing
+            person.addAnimation('acenter', acenter)
+            person.addAnimation('bcenter', bcenter)
+            person.addAnimation('bright', bright)
+            person.addAnimation('bleft', bleft)
+
+            person.changeAnimation(anim)
+            person.scale = 0.5;
+            drawSprite(person)
+            
+            
+        }
     })
 }
 
@@ -86,29 +110,6 @@ socket.on('newusr', function(data) {
     sendpos()
     console.log("New user: " + data + " connected")
 })
-
-function draw() {
-    background(img)
-    for (let value of dots) {
-        
-        if(value.talking == true) {
-            noStroke()
-            fill(255,255,0, 100)
-            ellipse(value.x,value.y, 10,10)
-        }
-        var char = createSprite(value.x, value.y, 32,32)
-        var anim = value.character + value.facing
-        char.addAnimation('acenter', acenter)
-        char.addAnimation('bcenter', bcenter)
-        char.addAnimation('bright', bright)
-        char.addAnimation('bleft', bleft)
-        char.changeAnimation(anim)
-        char.scale = 0.5;
-        drawSprite(char)
-    }
-    
-}
-
 
 
 function sendpos() {
@@ -170,9 +171,21 @@ addEventListener("keydown", (event) => {
             case 83:
                 keys.s = true
                 break;
+            case 37:
+                keys.a = true
+                break;
+            case 38:
+                keys.w = true 
+                break;
+            case 39:
+                keys.d = true
+                break;
+            case 40:
+                keys.s = true
+                break;
             
         }
-        if (x > 940 && x < 960 && y > 0 && y < 20) {
+        if (x > 920 && x < 980 && y > 0 && y < 40) {
             const tweetinput = document.getElementById("tweet-input")
             tweetinput.style.visibility = "visible"
             tweetinput.addEventListener("keydown", function(event) {
@@ -201,6 +214,18 @@ addEventListener("keyup", (event) => {
         case 83:
             keys.s = false
             break;
+        case 37:
+            keys.a = false
+            break;
+        case 38:
+            keys.w = false 
+            break;
+        case 39:
+            keys.d = false
+            break;
+        case 40:
+            keys.s = false
+            break;
     }
     facing = "center"
     sendpos()
@@ -209,18 +234,7 @@ addEventListener("keyup", (event) => {
 document.onkeydown = function (event) {
     if (x > 0 && x < 1900 && y > 0 && y < 700) {
         switch (event.keyCode) {
-            case 37:
-            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-            break;
-            case 38:
-            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                break;
-            case 39:
-            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                break;
-            case 40:
-            alert("Move with the [w], [a], [s] & [d] keys. NOT the arrow keys")
-                break;
+            
         }
     }
     
@@ -239,11 +253,6 @@ document.onkeydown = function (event) {
             y = 699
         }
         
-        if (x < 1 && y > 300 && y < 400) {
-            if (confirm("Get out of V-alhalla?")) {
-                close();
-            }
-        }
     }
     
     sendpos()
