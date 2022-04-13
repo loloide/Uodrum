@@ -1,5 +1,5 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 
 var x = 5
 var y = 350
@@ -10,6 +10,8 @@ var micLevel
 var facing = "center"
 var character = "b"
 var acenter
+var aright
+var aleft
 var bcenter
 var bright
 var bleft
@@ -30,6 +32,8 @@ if (localStorage != 0) {
 
 function preload() {
     acenter = loadAnimation('sprites/myon0.png', 'sprites/myon1.png', 'sprites/myon2.png', 'sprites/myon3.png');
+    aright = loadAnimation('sprites/myonrunr0.png')
+    aleft = loadAnimation('sprites/myonrunl0.png')
     bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
     bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
     bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
@@ -73,33 +77,24 @@ function setup() {
                 console.log(dots)
             }
             
-        }
-        background(img)
-        for (let value of dots) {
-            
-            if(value.talking == true) {
-                noStroke()
-                fill(255,255,0, 100)
-                ellipse(value.x,value.y, 10,10)
-            }
-            var person = createSprite(value.x, value.y, 32,32)
-            var anim = value.character + value.facing
-            person.addAnimation('acenter', acenter)
-            person.addAnimation('bcenter', bcenter)
-            person.addAnimation('bright', bright)
-            person.addAnimation('bleft', bleft)
-
-            person.changeAnimation(anim)
-            person.scale = 0.5;
-            drawSprite(person)
-            
-            
-        }
+        }  
     })
 }
 
 
-
+function draw() {
+    background(img)
+    for (let value of dots) {
+        if(value.talking == true) {
+            noStroke()
+            fill(255,255,0, 100)
+            ellipse(value.x,value.y, 10,10)
+        }
+        
+        var person = value.character + value.facing
+        animation(window[person] ,value.x,value.y)
+    }
+}
 
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
