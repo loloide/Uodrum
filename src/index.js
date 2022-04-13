@@ -1,5 +1,5 @@
-//socket = io.connect("https://v-alhalla.herokuapp.com/");
-socket = io.connect("http://localhost:3000");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
+//socket = io.connect("http://localhost:3000");
 
 var x = 5
 var y = 350
@@ -90,7 +90,7 @@ function draw() {
             fill(255,255,0, 100)
             ellipse(value.x,value.y, 10,10)
         }
-        
+
         var person = value.character + value.facing
         animation(window[person] ,value.x,value.y)
     }
