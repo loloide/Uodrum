@@ -6,8 +6,8 @@ var y = 350
 var dots = []
 var speed = 2
 var mic
-var micLevel
-var facing = "center"
+var miclvl
+var facing = "center"   
 var character = "b"
 var acenter
 var aright
@@ -21,6 +21,7 @@ if (localStorage.character) {
     character = localStorage.getItem("character")
 } else {
     character = "a"
+    alert("Welcome to v-alhalla  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. You can change the volume of the volume with the up and down keys")
 }  
 
 if (localStorage != 0) {
@@ -32,8 +33,8 @@ if (localStorage != 0) {
 
 function preload() {
     acenter = loadAnimation('sprites/myon0.png', 'sprites/myon1.png', 'sprites/myon2.png', 'sprites/myon3.png');
-    aright = loadAnimation('sprites/myonrunr0.png')
-    aleft = loadAnimation('sprites/myonrunl0.png')
+    aright = loadAnimation('sprites/myonrunr0.png', 'sprites/myonrunr1.png')
+    aleft = loadAnimation('sprites/myonrunl0.png', 'sprites/myonrunl1.png')
     bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
     bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
     bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
@@ -88,12 +89,17 @@ function draw() {
         if(value.talking == true) {
             noStroke()
             fill(255,255,0, 100)
-            ellipse(value.x,value.y, 10,10)
+            
         }
 
         var person = value.character + value.facing
-        animation(window[person] ,value.x,value.y)
+        stroke('#f5942c')
+        fill(245, 208, 44, 100)
+        ellipse(value.x,value.y  + 32, 20,10)
+        animation(window[person], value.x, value.y)
+        
     }
+    miclvl = mic.getLevel();
 }
 
 socket.on('disusr', function(data) {
@@ -105,6 +111,34 @@ socket.on('newusr', function(data) {
     sendpos()
     console.log("New user: " + data + " connected")
 })
+
+socket.on('musicreq', function(data) {
+    console.log(data)
+    
+    if (document.getElementById("musiciframe")) {
+        document.getElementById("musiciframe").remove()
+        const iframeyt = document.createElement("iframe");
+        iframeyt.src = "https://www.youtube.com/embed/" + data + "?controls=0";
+        iframeyt.width = 160
+        iframeyt.height = 90
+        iframeyt.frameborder = 0
+        iframeyt.id = "musiciframe"
+        // Append to body:
+        document.getElementById("iframeyt").appendChild(iframeyt);
+        
+    } else {
+        const iframeyt = document.createElement("iframe");
+        iframeyt.src = "https://www.youtube.com/embed/" + data + "?controls=0";
+        iframeyt.width = 160
+        iframeyt.height = 90
+        iframeyt.frameborder = 0
+        iframeyt.id = "musiciframe"
+        // Append to body:
+        document.getElementById("iframeyt").appendChild(iframeyt);
+    }
+    
+})
+
 
 
 function sendpos() {
@@ -125,6 +159,7 @@ function sendpos() {
     localStorage.setItem("character", character)
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
+    updateInfo()
 }
 
 function tweet() {
@@ -135,6 +170,15 @@ function tweet() {
         tweet: val
     }
     socket.emit("tweet", data)
+}
+
+
+
+function musicreq() {
+    var val = document.querySelector('#music-input').value;
+    console.log("requested music from: " + val)
+    
+    socket.emit('musicreq', val)
 }
 
 function updateInfo() {
@@ -166,18 +210,7 @@ addEventListener("keydown", (event) => {
             case 83:
                 keys.s = true
                 break;
-            case 37:
-                keys.a = true
-                break;
-            case 38:
-                keys.w = true 
-                break;
-            case 39:
-                keys.d = true
-                break;
-            case 40:
-                keys.s = true
-                break;
+            
             
         }
         if (x > 920 && x < 980 && y > 0 && y < 40) {
@@ -192,7 +225,22 @@ addEventListener("keydown", (event) => {
             const tweetinput = document.getElementById("tweet-input")
             tweetinput.style.visibility = "hidden"
         }
+    } else {
+
+    
+        alert("Dont go outside the Room! （ ＞д＜）")
+        x = 3
+        y = 350
     }
+
+    const musicInput = document.getElementById("music-input")
+    musicInput.addEventListener("keyup", function(event) {
+        if (event.keyCode == 13){
+            musicreq()
+        }
+    });
+    sendpos()
+    updateInfo()
 });
 
 addEventListener("keyup", (event) => {
@@ -209,51 +257,10 @@ addEventListener("keyup", (event) => {
         case 83:
             keys.s = false
             break;
-        case 37:
-            keys.a = false
-            break;
-        case 38:
-            keys.w = false 
-            break;
-        case 39:
-            keys.d = false
-            break;
-        case 40:
-            keys.s = false
-            break;
     }
     facing = "center"
     sendpos()
 });
-
-document.onkeydown = function (event) {
-    if (x > 0 && x < 1900 && y > 0 && y < 700) {
-        switch (event.keyCode) {
-            
-        }
-    }
-    
-    
-    else {
-        if (x == 0) {
-            x = 1
-        }
-        if (x == 1900) {
-            x = 1899
-        }
-        if (y == 0) {
-            y = 1
-        }
-        if (y == 700) {
-            y = 699
-        }
-        
-    }
-    
-    sendpos()
-
-    updateInfo()
-};
 
 
 //audio
@@ -269,12 +276,12 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     };
     mediaRecorder.onstop = function(e) {
         var blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
-        micLevel = mic.getLevel();
+        
         var data = {
             b:blob,
             id: socket.id
         };
-        if (micLevel > 0.01    ) {
+        if (miclvl > 0.01    ) {
             socket.emit('voice', data);
         }
         
@@ -288,7 +295,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
         mediaRecorder.stop()
         mediaRecorder.start()
     }, 500);
-});
+}); 
 
 
 

@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.17.2",
     "socket.io": "^4.4.1",
-    "twitter-api-v2": "^1.11.2"
+    "twitter-api-v2": "^1.11.2",
+    "yt-converter": "^1.2.1"
   }
 }

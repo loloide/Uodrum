@@ -25,13 +25,12 @@ html {
 }
 
 #connected-people-div {
-    width: 50%;
+    padding-right: 10px;
     float: right;
     text-align: right;
 }
 
 #coords {
-    width: 50%;
     float: left;
     text-align: left;
 }
@@ -45,30 +44,19 @@ footer {
     width: 100%;
 }
 
-input[type="color"] {
-	-webkit-appearance: none;
-	border: none;
-	width: 25px;
-	height: 25px;
-    background: transparent;    
-}
-input[type="color"]::-webkit-color-swatch-wrapper {
-	padding: 0;
-}
-input[type="color"]::-webkit-color-swatch {
-	border: none;
-}
 
-#colorinp {
-    width: 50%;
+#tweet-input {
     float: left;
     text-align: left;
 }
-#tweet-input {
-    width: 10%;
-    float: right;
+#music-input {
+    width: 75%;
+}
+#iframeyt {
+    float:right;
     text-align: right;
 }
+
 button {
     background-color: #e4e4e4;
     border: none;
@@ -81,3 +69,4 @@ button {
     margin-top: 5px;
     border-radius: 5px;
 }
+

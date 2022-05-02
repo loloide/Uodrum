@@ -1,9 +1,9 @@
 var express = require('express')
 const { TwitterApi } = require('twitter-api-v2');
+
 var app = express();
 
 var server = app.listen(process.env.PORT || 3000, listen);
-
 
 
 function listen() {
@@ -34,8 +34,12 @@ var io = require('socket.io')(server, {
   io.sockets.on('connection', function (socket) {
     io.sockets.emit('newusr', socket.id)
 
-
     console.log("We have a new client: " + socket.id);
+
+    socket.on('musicreq', function(data) {
+      var vidid = data.slice(17, 28);
+      io.sockets.emit('musicreq', vidid)
+    })
 
     socket.on('voice', function(data) {
       // can choose to broadcast it to whoever you want
