@@ -44,8 +44,6 @@ function preload() {
 function setup() {
     
     frameRate(15)
-    
-    
     var canvas = createCanvas(1900, 700);
     userStartAudio()
     mic = new p5.AudioIn();
