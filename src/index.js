@@ -1,5 +1,5 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 
 var x = 5
 var y = 350
@@ -70,7 +70,6 @@ function setup() {
                     x: data.x,
                     y: data.y,
                     character: data.character,
-                    talking: false,
                     facing: data.facing
                 });
                 console.log(dots)
@@ -84,11 +83,6 @@ function setup() {
 function draw() {
     background(img)
     for (let value of dots) {
-        if(value.talking == true) {
-            noStroke()
-            fill(255,255,0, 100)
-            
-        }
 
         var person = value.character + value.facing
         stroke('#f5942c')
@@ -107,37 +101,13 @@ socket.on('disusr', function(data) {
 
 socket.on('newusr', function(data) {
     sendpos()
-    console.log("New user: " + data + " connected")
+    console.log("New user: " + data.id + " connected")
+    console.log(data.playlist)
 })
 
 socket.on('musicreq', function(data) {
     console.log(data)
-    
-    if (document.getElementById("musiciframe")) {
-        document.getElementById("musiciframe").remove()
-        const iframeyt = document.createElement("iframe");
-        iframeyt.src = "https://www.youtube.com/embed/" + data + "?controls=0";
-        iframeyt.width = 160
-        iframeyt.height = 90
-        iframeyt.frameborder = 0
-        iframeyt.id = "musiciframe"
-        // Append to body:
-        document.getElementById("iframeyt").appendChild(iframeyt);
-        
-    } else {
-        const iframeyt = document.createElement("iframe");
-        iframeyt.src = "https://www.youtube.com/embed/" + data + "?controls=0";
-        iframeyt.width = 160
-        iframeyt.height = 90
-        iframeyt.frameborder = 0
-        iframeyt.id = "musiciframe"
-        // Append to body:
-        document.getElementById("iframeyt").appendChild(iframeyt);
-    }
-    
 })
-
-
 
 function sendpos() {
     if (keys['w'] == true) { y = y - speed; facing = "center"}
@@ -173,10 +143,13 @@ function tweet() {
 
 
 function musicreq() {
+
     var val = document.querySelector('#music-input').value;
-    console.log("requested music from: " + val)
+    if (val.length > 1) {
+        socket.emit('musicreq', val)
+        document.querySelector('#music-input').value = ""
+    }
     
-    socket.emit('musicreq', val)
 }
 
 function updateInfo() {
@@ -310,7 +283,6 @@ socket.on('voice', function(data) {
          
         return Math.sqrt( xs + ys );
     };
-    dots[objIndex].talking = true
     dots.length > 1 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
     
     var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
@@ -326,9 +298,6 @@ socket.on('voice', function(data) {
         audio.volume = 1
     }
     audio.play();
-    audio.addEventListener("ended", function() {
-        dots[objIndex].talking = false
-    })
 });
 
 

@@ -1,10 +1,14 @@
 var express = require('express')
-const { TwitterApi } = require('twitter-api-v2');
+const { TwitterApi, MuteUserIdsV1Paginator } = require('twitter-api-v2');
+const http = require('http')
+const fs = require('fs')
+const stream = require('youtube-audio-stream')
+const path = require('path')
+
 
 var app = express();
-
 var server = app.listen(process.env.PORT || 3000, listen);
-
+var playlist = []
 
 function listen() {
   var host = "localhost"
@@ -31,14 +35,24 @@ var io = require('socket.io')(server, {
   allowEIO3: true
   });
 
+  
   io.sockets.on('connection', function (socket) {
-    io.sockets.emit('newusr', socket.id)
+    
 
     console.log("We have a new client: " + socket.id);
 
     socket.on('musicreq', function(data) {
-      var vidid = data.slice(17, 28);
-      io.sockets.emit('musicreq', vidid)
+      // var vidid = data.slice(17, 28);
+      
+      playlist.push(data)
+
+      
+      var stream = ytplay.stream("https://youtu.be/lXT4OdGw57s")
+      console.log(stream)
+
+
+      io.sockets.emit('musicreq', playlist)
+      
     })
 
     socket.on('voice', function(data) {
@@ -49,11 +63,6 @@ var io = require('socket.io')(server, {
     socket.on('usr', function(data) {
       io.sockets.emit('usr', data) 
     }) 
-      
-    
-    socket.on('usr', function(data){
-      io.sockets.emit('usr', data)
-    })
 
     socket.on('disconnect', function() {
       console.log("Client has disconnected " + socket.id);
@@ -64,7 +73,28 @@ var io = require('socket.io')(server, {
       userClient.v2.tweet(data.id + " says: \n" + data.tweet)
       console.log("user: " + data.id + " tweeted: '" + data.tweet + "'")
     })
+
+    var newusrinfo = {
+      id: socket.id,
+      playlist: playlist
+    }
+    io.sockets.emit('newusr', newusrinfo)
   }
 );
 //socket.broadcast.emit('usr', data); //(send to all except sender)
 
+
+//music
+
+
+http.createServer(demo).listen(4000)
+
+function demo (req, res) {
+  if (req.url === '/') {
+    return fs.createReadStream(path.join(__dirname, '/src/index.html')).pipe(res)
+  } else if (req.url === '/ping') {
+    res.end('pong')
+  } else if (/youtube/.test(req.url)) {
+    stream('http:/' + req.url).pipe(res)
+  }
+}
