@@ -109,6 +109,22 @@ socket.on('musicreq', function(data) {
     console.log(data)
 })
 
+socket.on('newsong', function() {
+    newsong()
+}) 
+
+function newsong() {
+    const audioel = document.createElement("audio");
+    audioel.id = "player"
+    audioel.src = "http://localhost:3000/music"
+    audioel.style = "visibility:hidden" 
+    audioel.preload= "metadata"
+    audioel.controls
+    audioel.autoplay
+    document.body.appendChild(audioel)
+    document.getElementById("player").addEventListener("ended", socket.emit("finishedSong"))
+}
+
 function sendpos() {
     if (keys['w'] == true) { y = y - speed; facing = "center"}
     if (keys['a'] == true) { x = x - speed; facing = "left"} 
