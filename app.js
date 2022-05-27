@@ -1,14 +1,11 @@
 var express = require('express')
 const { TwitterApi, MuteUserIdsV1Paginator } = require('twitter-api-v2');
-const http = require('http')
-const fs = require('fs')
 const stream = require('youtube-audio-stream')
-const path = require('path')
-
+const ytinfo = require('ytdl-core')
 
 var app = express();
 var server = app.listen(process.env.PORT || 3000, listen);
-var playlist = ["https://youtu.be/PGJKeESLBpQ","https://youtu.be/lXT4OdGw57s"]
+var playlist = []
 
 function listen() {
   var host = "localhost"
@@ -30,15 +27,47 @@ var io = require('socket.io')(server, {
 });
 
 app.get('/music', (req, res) => {
-  stream(playlist[0]).pipe(res)
+  if (playlist.length > 0) {
+    stream(playlist[0].link).pipe(res)
+  }
 })
+
+function changeSong() {
+    playlist.shift();
+    if (playlist.length != 0) {
+      setTimeout(changeSong, playlist[0].milis)
+      console.log(playlist.length)
+    }
+    
+
+  
+  
+}
 
 io.sockets.on('connection', function (socket) {
   
   console.log("We have a new client: " + socket.id);
 
   socket.on('musicreq', function(data) {
-    playlist.push(data)
+    var oldplaylistlenght = playlist.length
+    
+    ytinfo.getInfo(data).then(info => {
+      console.log(info.videoDetails.lengthSeconds)
+      var milis = info.videoDetails.lengthSeconds * 1000
+      var song = {
+        link: data,
+        milis: milis
+      }
+      if (playlist.length == 0) {
+        io.sockets.emit("newsong")
+        console.log("newsong")
+        setTimeout(changeSong, song.milis)
+      }
+
+      playlist.push(song)
+    })
+    
+    
   })
 
   socket.on('voice', function(data) {
@@ -58,11 +87,6 @@ io.sockets.on('connection', function (socket) {
   socket.on('tweet', function(data) {
     userClient.v2.tweet(data.id + " says: \n" + data.tweet)
     console.log("user: " + data.id + " tweeted: '" + data.tweet + "'")
-  })
-
-  socket.on('finishedSong', function() {
-    playlist.arr.shift();
-    console.log(playlist)
   })
 
   var newusrinfo = {
