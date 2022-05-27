@@ -5,7 +5,7 @@ const ytinfo = require('ytdl-core')
 
 var app = express();
 var server = app.listen(process.env.PORT || 3000, listen);
-var playlist = []
+var playlist = ["https://youtu.be/a_6quQ994JI"]
 
 function listen() {
   var host = "localhost"
