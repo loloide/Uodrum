@@ -1,5 +1,5 @@
-//socket = io.connect("https://v-alhalla.herokuapp.com/");
-socket = io.connect("http://localhost:3000");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
+//socket = io.connect("http://localhost:3000");
 
 var x = 5
 var y = 350
@@ -38,11 +38,9 @@ function preload() {
     bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
     bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
     bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
-    
 }
 
 function setup() {
-    
     frameRate(15)
     var canvas = createCanvas(1900, 700);
     userStartAudio()

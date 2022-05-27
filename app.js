@@ -16,10 +16,10 @@ function listen() {
 app.use(express.static('src'));
 
 const userClient = new TwitterApi({
-  // appKey: process.env.APP_KEY,
-  // appSecret: process.env.APP_KEY_SECRET,
-  // accessToken: process.env.ACCESS_TOKEN,
-  // accessSecret: process.env.ACCESS_TOKEN_SECRET,
+  appKey: process.env.APP_KEY,
+  appSecret: process.env.APP_KEY_SECRET,
+  accessToken: process.env.ACCESS_TOKEN,
+  accessSecret: process.env.ACCESS_TOKEN_SECRET,
 });
 
 var io = require('socket.io')(server, {
@@ -37,11 +37,8 @@ function changeSong() {
     if (playlist.length != 0) {
       setTimeout(changeSong, playlist[0].milis)
       console.log(playlist.length)
+      io.sockets.emit("newsong")
     }
-    
-
-  
-  
 }
 
 io.sockets.on('connection', function (socket) {
@@ -49,10 +46,7 @@ io.sockets.on('connection', function (socket) {
   console.log("We have a new client: " + socket.id);
 
   socket.on('musicreq', function(data) {
-    var oldplaylistlenght = playlist.length
-    
     ytinfo.getInfo(data).then(info => {
-      console.log(info.videoDetails.lengthSeconds)
       var milis = info.videoDetails.lengthSeconds * 1000
       var song = {
         link: data,
@@ -63,11 +57,8 @@ io.sockets.on('connection', function (socket) {
         console.log("newsong")
         setTimeout(changeSong, song.milis)
       }
-
       playlist.push(song)
     })
-    
-    
   })
 
   socket.on('voice', function(data) {
