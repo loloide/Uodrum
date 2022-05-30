@@ -136,7 +136,7 @@ function sendpos() {
 function tweet() {
     var val = document.querySelector('#tweet-input').value;
     
-    socket.emit("tweet", data)
+    
     if (val.length > 1) {
         document.querySelector('#tweet-input').value = ""
         console.log("tweeted: " + val)
@@ -144,6 +144,7 @@ function tweet() {
             id: socket.id,
             tweet: val
         }
+        socket.emit("tweet", data)
     }
 }
 
