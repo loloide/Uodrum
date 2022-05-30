@@ -108,7 +108,7 @@ socket.on('musicreq', function(data) {
 })
 
 socket.on('newsong', function() {
-    console.log(document.getElementById("player"))
+    console.log("new song!")
     document.getElementById("player").load()
 
 }) 
@@ -136,12 +136,16 @@ function sendpos() {
 
 function tweet() {
     var val = document.querySelector('#tweet-input').value;
-    console.log("tweeted: " + val)
-    var data = {
-        id: socket.id,
-        tweet: val
-    }
+    
     socket.emit("tweet", data)
+    if (val.length > 1) {
+        document.querySelector('#tweet-input').value = ""
+        console.log("tweeted: " + val)
+        var data = {
+            id: socket.id,
+            tweet: val
+        }
+    }
 }
 
 
@@ -210,7 +214,7 @@ addEventListener("keydown", (event) => {
 
     const musicInput = document.getElementById("music-input")
     musicInput.addEventListener("keyup", function(event) {
-        if (event.keyCode == 13){
+        if (event.keyCode == 13) {
             musicreq()
         }
     });
