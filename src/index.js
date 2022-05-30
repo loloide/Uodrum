@@ -110,7 +110,6 @@ socket.on('musicreq', function(data) {
 socket.on('newsong', function() {
     console.log("new song!")
     document.getElementById("player").load()
-
 }) 
 
 function sendpos() {
@@ -148,8 +147,6 @@ function tweet() {
     }
 }
 
-
-
 function musicreq() {
 
     var val = document.querySelector('#music-input').value;
@@ -157,7 +154,6 @@ function musicreq() {
         socket.emit('musicreq', val)
         document.querySelector('#music-input').value = ""
     }
-    
 }
 
 function updateInfo() {
