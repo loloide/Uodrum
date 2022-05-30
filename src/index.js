@@ -258,7 +258,7 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
             b:blob,
             id: socket.id
         };
-        if (miclvl > 0.01    ) {
+        if (miclvl > 0.005   ) {
             socket.emit('voice', data);
         }
         
