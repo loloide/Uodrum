@@ -138,13 +138,14 @@ function tweet() {
     
     
     if (val.length > 1) {
-        document.querySelector('#tweet-input').value = ""
+        
         console.log("tweeted: " + val)
         var data = {
             id: socket.id,
             tweet: val
         }
         socket.emit("tweet", data)
+        document.querySelector('#tweet-input').value = ""
     }
 }
 
