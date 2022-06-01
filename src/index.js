@@ -81,13 +81,11 @@ function setup() {
 function draw() {
     background(img)
     for (let value of dots) {
-
         var person = value.character + value.facing
         stroke('#f5942c')
         fill(245, 208, 44, 100)
         ellipse(value.x,value.y  + 32, 20,10)
         animation(window[person], value.x, value.y)
-        
     }
     miclvl = mic.getLevel();
 }
@@ -98,9 +96,9 @@ socket.on('disusr', function(data) {
 })
 
 socket.on('newusr', function(data) {
-    sendpos()
     console.log("New user: " + data.id + " connected")
     console.log(data.playlist)
+    sendpos()
 })
 
 socket.on('musicreq', function(data) {

@@ -39,6 +39,7 @@ html {
     width: 24px;
     height: 24px;
     padding-bottom: 10px;
+    border-radius: 50%;
 }
 
 footer {
@@ -77,9 +78,9 @@ button {
     color: #161413;
     padding: 5px 5px;
     cursor: pointer;
-    border-radius: 5px;
 }
 
 #change-char {
     font-size: 15px;
+    border-radius: 5px;
 }

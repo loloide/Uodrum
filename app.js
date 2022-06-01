@@ -1,5 +1,5 @@
 var express = require('express')
-const { TwitterApi, MuteUserIdsV1Paginator } = require('twitter-api-v2');
+const { TwitterApi } = require('twitter-api-v2');
 const stream = require('youtube-audio-stream')
 const ytinfo = require('ytdl-core')
 
