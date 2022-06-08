@@ -16,10 +16,10 @@ function listen() {
 app.use(express.static('src'));
 
 const userClient = new TwitterApi({
-  appKey: process.env.APP_KEY,
-  appSecret: process.env.APP_KEY_SECRET,
-  accessToken: process.env.ACCESS_TOKEN,
-  accessSecret: process.env.ACCESS_TOKEN_SECRET,
+  // appKey: process.env.APP_KEY,
+  // appSecret: process.env.APP_KEY_SECRET,
+  // accessToken: process.env.ACCESS_TOKEN,
+  // accessSecret: process.env.ACCESS_TOKEN_SECRET,
 });
 
 var io = require('socket.io')(server, {
@@ -67,7 +67,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('usr', function(data) {
-    io.sockets.emit('usr', data) 
+    socket.broadcast.emit('usr', data) 
   }) 
 
   socket.on('disconnect', function() {
@@ -84,7 +84,7 @@ io.sockets.on('connection', function (socket) {
     id: socket.id,
     playlist: playlist
   }
-  io.sockets.emit('newusr', newusrinfo)
+  socket.broadcast.emit('newusr', newusrinfo)
 });
 //socket.broadcast.emit('usr', data); //(send to all except sender)
 

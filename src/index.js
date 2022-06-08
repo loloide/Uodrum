@@ -1,10 +1,10 @@
-socket = io.connect("https://v-alhalla.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://v-alhalla.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 
-var x = 5
-var y = 350
+var x = 3426
+var y = 1474
 var dots = []
-var speed = 2
+var speed = 4
 var mic
 var miclvl
 var facing = "center"   
@@ -15,7 +15,7 @@ var aleft
 var bcenter
 var bright
 var bleft
-
+var viewport
 
 if (localStorage.character) {
     character = localStorage.getItem("character")
@@ -38,20 +38,20 @@ function preload() {
     bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
     bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
     bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
+
+    img = loadImage("/background.png")
 }
 
 function setup() {
     frameRate(15)
-    var canvas = createCanvas(1900, 700);
+    var canvas = createCanvas(window.innerWidth, window.innerHeight);
     userStartAudio()
     mic = new p5.AudioIn();
     mic.start();
-    noSmooth()
     canvas.parent("canvasDiv")
-    img = loadImage("/background.png")  
-    background(img)
+    var backgr = img.get(x - window.innerWidth / 2, y - window.innerHeight / 2, window.innerWidth, window.innerHeight)
+    background(backgr)
     sendpos() 
-    updateInfo()
     socket.on('usr', function(data) {
         if(dots.some(dot => dot.id === data.id)){
             var index = dots.findIndex((obj => obj.id == data.id));
@@ -77,18 +77,38 @@ function setup() {
     })
 }
 
+function windowResized() {
+    resizeCanvas(window.innerWidth, window.innerHeight);
+  }
 
 function draw() {
-    background(img)
+    
+    translate(window.innerWidth / 2, window.innerHeight / 2)
+
+    var backgr = img.get(x - window.innerWidth / 2, y - window.innerHeight / 2, window.innerWidth, window.innerHeight)
+    background(backgr)
+    
+    var person = character + facing
+    stroke('#f5942c')
+    fill(245, 208, 44, 100)
+    animation(window[person], 0, 0)
+    miclvl = mic.getLevel();
+
+
     for (let value of dots) {
         var person = value.character + value.facing
         stroke('#f5942c')
         fill(245, 208, 44, 100)
-        ellipse(value.x,value.y  + 32, 20,10)
-        animation(window[person], value.x, value.y)
-    }
-    miclvl = mic.getLevel();
+        //ellipse(value.x ,value.y  + 32 , 20,10)
+        animation(window[person], value.x - x, value.y - y)
+    }   
+
+    var displayx = x - 3840
+    var displayy = y - 1504
+    document.getElementById("xpos").innerHTML = "x:" + displayx
+    document.getElementById("ypos").innerHTML = "y:" + displayy
 }
+
 
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
@@ -110,6 +130,22 @@ socket.on('newsong', function() {
     document.getElementById("player").load()
 }) 
 
+function musicreq() {
+
+    var val = document.querySelector('#music-input').value;
+    if (val.length > 1) {
+        socket.emit('musicreq', val)
+        document.querySelector('#music-input').value = ""
+    }
+}
+
+var keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+};
+
 function sendpos() {
     if (keys['w'] == true) { y = y - speed; facing = "center"}
     if (keys['a'] == true) { x = x - speed; facing = "left"} 
@@ -128,94 +164,39 @@ function sendpos() {
     localStorage.setItem("character", character)
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
-    updateInfo()
 }
-
-function tweet() {
-    var val = document.querySelector('#tweet-input').value;
-    
-    
-    if (val.length > 1) {
-        
-        console.log("tweeted: " + val)
-        var data = {
-            id: socket.id,
-            tweet: val
-        }
-        socket.emit("tweet", data)
-        document.querySelector('#tweet-input').value = ""
-    }
-}
-
-function musicreq() {
-
-    var val = document.querySelector('#music-input').value;
-    if (val.length > 1) {
-        socket.emit('musicreq', val)
-        document.querySelector('#music-input').value = ""
-    }
-}
-
-function updateInfo() {
-    var xshow = document.getElementById("xshow").innerHTML = "x: " + x
-    var yshow = document.getElementById("yshow").innerHTML = "y: " + y
-    var numbershow = document.getElementById("connected-people").innerHTML = "connected: " + dots.length
-}
-
-//movement
-var keys = {
-    w: false,
-    a: false,
-    s: false,
-    d: false
-};
 
 addEventListener("keydown", (event) => {
-    if (x > 0 && x < 1900 && y > 0 && y < 700) {
-        switch (event.keyCode) {
-            case 65:
-                keys.a = true
-                break;
-            case 87:
-                keys.w = true 
-                break;
-            case 68:
-                keys.d = true
-                break;
-            case 83:
-                keys.s = true
-                break;
-            
-            
-        }
-        if (x > 920 && x < 980 && y > 0 && y < 40) {
-            const tweetinput = document.getElementById("tweet-input")
-            tweetinput.style.visibility = "visible"
-            tweetinput.addEventListener("keydown", function(event) {
-                if (event.keyCode == 13){
-                    tweet()
-                }
-            });
-        } else {
-            const tweetinput = document.getElementById("tweet-input")
-            tweetinput.style.visibility = "hidden"
-        }
-    } else {
-
-    
-        alert("Dont go outside the Room! （ ＞д＜）")
-        x = 3
-        y = 350
+    switch (event.keyCode) {
+        case 65:
+            keys.a = true
+            break;
+        case 87:
+            keys.w = true 
+            break;
+        case 68:
+            keys.d = true
+            break;
+        case 83:
+            keys.s = true
+            break;
+        case 69:
+            document.getElementById('myModal').style.display = 'block'
+            break;
+        case 27:
+            document.getElementById('myModal').style.display = 'none';
     }
-
+    
+    
+    
     const musicInput = document.getElementById("music-input")
     musicInput.addEventListener("keyup", function(event) {
         if (event.keyCode == 13) {
             musicreq()
         }
     });
+
     sendpos()
-    updateInfo()
 });
 
 addEventListener("keyup", (event) => {

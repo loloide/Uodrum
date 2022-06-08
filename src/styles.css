@@ -1,31 +1,31 @@
+:root {
+    --fontsize: 15px;
+}
+
 body {
     align-items: center;
-    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+    font-family: 'Press Start 2P', cursive;
     color: #e4e4e4;
-    
+    padding: 0%;
+    margin: 0px;
 }
 
 #info {
-    font-size: 25px;
+    font-size: var(--fontsize);
 }
 
-.p5Canvas {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #000000;
-    border-radius: 5px;
-}
+
 
 html {
     background-color: #161413;
 }
 
 #valhalla-title {
-    font-size: 50px;
+    font-size: var(--fontsize);
 }
 
 #connected-people-div {
-    padding-right: 10px;
     float: right;
     text-align: right;
 }
@@ -35,12 +35,6 @@ html {
     text-align: left;
 }
 
-.volume-button {
-    width: 24px;
-    height: 24px;
-    padding-bottom: 10px;
-    border-radius: 50%;
-}
 
 footer {
     position: fixed;
@@ -50,37 +44,87 @@ footer {
     align-items: right;
     width: 100%;
 }
+
 #tweet-input {
     float: left;
     text-align: left;
 }
-#music-input {
-    
-    width: 75%;
-    float:right;
+
+#help-config {
+    padding-top: 5px;
 }
-#iframeyt {
-    float:right;
-    text-align: right;
-}
+
 #help {
     float: right;
-    padding-top: 5px;
-    padding-left: 5px;
+    height: 25px;
+    width: 25px;
 }
-#help-volume {
-    height: 32px;
+
+#config {
+    height: 25px; 
+    width: 25px; 
+    float: right;
+}
+
+.volume-button {
+    padding-top: 5px;
+    height: 30px;
+}
+
+#volume {
+    padding-top: 10px;
 }
 
 button {
     background-color: #e4e4e4;
     border: none;
     color: #161413;
-    padding: 5px 5px;
     cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: var(--fontsize);
 }
 
 #change-char {
-    font-size: 15px;
-    border-radius: 5px;
+    font-size: var(--fontsize);
+    padding-top: 5px;
+    height: 30px;
 }
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #161413;
+    text-align: left;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
