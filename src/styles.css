@@ -75,6 +75,11 @@ footer {
     padding-top: 10px;
 }
 
+#music-input {
+    height: 30px;
+    width: 253px;
+}
+
 button {
     background-color: #e4e4e4;
     border: none;
