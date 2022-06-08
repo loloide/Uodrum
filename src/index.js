@@ -1,5 +1,5 @@
-//socket = io.connect("https://v-alhalla.herokuapp.com/");
-socket = io.connect("http://localhost:3000");
+socket = io.connect("https://v-alhalla.herokuapp.com/");
+//socket = io.connect("http://localhost:3000");
 
 var x = 3426
 var y = 1474
