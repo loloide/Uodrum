@@ -79,7 +79,7 @@ function setup() {
         }  
     })
     document.getElementById("current-char").innerText = "current: " + charactername
-    document.getElementById("player").load()
+    
 }
 
 function windowResized() {
@@ -352,3 +352,4 @@ function changeChar() {
 }
 
 console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   
+document.getElementById("player").load()
