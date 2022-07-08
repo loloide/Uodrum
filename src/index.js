@@ -79,6 +79,7 @@ function setup() {
         }  
     })
     document.getElementById("current-char").innerText = "current: " + charactername
+    document.getElementById("player").load()
 }
 
 function windowResized() {
