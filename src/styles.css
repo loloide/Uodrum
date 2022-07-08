@@ -46,10 +46,6 @@ footer {
     padding-bottom: 1px;
 }
 
-#tweet-input {
-    float: left;
-    text-align: left;
-}
 
 #help-config {
     padding-top: 5px;
@@ -76,11 +72,27 @@ footer {
     padding-top: 10px;
 }
 
-#music-input {
+.text-input {
     height: 30px;
     width: 253px;
+    clip-path: polygon(
+        0px 4px,
+        4px 4px,
+        4px 0px,
+        calc(100% - 4px) 0px,
+        calc(100% - 4px) 4px,
+        100% 4px,
+        100% calc(100% - 4px),
+        calc(100% - 4px) calc(100% - 4px),
+        calc(100% - 4px) 100%,
+        4px 100%,
+        4px calc(100% - 4px),
+        0px calc(100% - 4px)
+    );
 }
-
+.text-input::placeholder {
+    font-family: 'Press Start 2P', cursive;
+}
 button {
     background-color: #e4e4e4;
     border: none;
@@ -88,6 +100,20 @@ button {
     cursor: pointer;
     font-family: 'Press Start 2P', cursive;
     font-size: var(--fontsize);
+    clip-path: polygon(
+        0px 4px,
+        4px 4px,
+        4px 0px,
+        calc(100% - 4px) 0px,
+        calc(100% - 4px) 4px,
+        100% 4px,
+        100% calc(100% - 4px),
+        calc(100% - 4px) calc(100% - 4px),
+        calc(100% - 4px) 100%,
+        4px 100%,
+        4px calc(100% - 4px),
+        0px calc(100% - 4px)
+    );
 }
 
 #change-char {
@@ -95,6 +121,7 @@ button {
     padding-top: 5px;
     height: 30px;
 }
+
 
 .modal {
     display: none; /* Hidden by default */
@@ -116,8 +143,29 @@ button {
     text-align: left;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
     width: 80%;
+    clip-path: polygon(
+        0px 12px,
+        6px 12px,
+        6px 6px,
+        12px 6px,
+        12px 0px,
+        calc(100% - 12px) 0px,
+        calc(100% - 12px) 6px,
+        calc(100% - 6px) 6px,
+        calc(100% - 6px) 12px,
+        100% 12px,
+        100% calc(100% - 12px),
+        calc(100% - 6px) calc(100% - 12px),
+        calc(100% - 6px) calc(100% - 6px),
+        calc(100% - 12px) calc(100% - 6px),
+        calc(100% - 12px) 100%,
+        12px 100%,
+        12px calc(100% - 6px),
+        6px calc(100% - 6px),
+        6px calc(100% - 12px),
+        0px calc(100% - 12px)
+    );
   }
   
   /* The Close Button */

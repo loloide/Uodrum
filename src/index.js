@@ -7,18 +7,18 @@ var dots = []
 var speed = 4
 var mic
 var miclvl
-var facing = "center"   
+var facing = "right"   
+var charactername = "Myon"
 var character = "b"
-var acenter
-var aright
-var aleft
-var bcenter
-var bright
-var bleft
+var notfound
+var aright; var aleft
+var bright; var bleft
+var cright; var cleft
 var viewport
 
 if (localStorage.character) {
     character = localStorage.getItem("character")
+    charactername = localStorage.getItem("charactername")
 } else {
     character = "a"
     alert("Welcome to v-alhalla  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. You can change the volume of the volume with the up and down keys")
@@ -32,12 +32,15 @@ if (localStorage != 0) {
 }  
 
 function preload() {
-    acenter = loadAnimation('sprites/myon0.png', 'sprites/myon1.png', 'sprites/myon2.png', 'sprites/myon3.png');
-    aright = loadAnimation('sprites/myonrunr0.png', 'sprites/myonrunr1.png')
-    aleft = loadAnimation('sprites/myonrunl0.png', 'sprites/myonrunl1.png')
-    bcenter = loadAnimation('sprites/red0.png', 'sprites/red1.png')
-    bright = loadAnimation('sprites/redrun0.png', 'sprites/redrun1.png')
-    bleft = loadAnimation('sprites/redrunl0.png', 'sprites/redrunl1.png')
+
+    notfound = loadAnimation('sprites/404.png')
+
+    aright = loadAnimation('sprites/playerA1right.png', 'sprites/playerA2right.png', 'sprites/playerA3right.png', 'sprites/playerA4right.png', 'sprites/playerA5right.png', 'sprites/playerA6right.png')
+    aleft = loadAnimation('sprites/playerA1left.png', 'sprites/playerA2left.png', 'sprites/playerA3left.png', 'sprites/playerA4left.png', 'sprites/playerA5left.png', 'sprites/playerA6left.png')
+    bright = loadAnimation('sprites/playerB1right.png', 'sprites/playerB2right.png', 'sprites/playerB3right.png', 'sprites/playerB4right.png', 'sprites/playerB5right.png', 'sprites/playerB6right.png')
+    bleft = loadAnimation('sprites/playerB1left.png', 'sprites/playerB2left.png', 'sprites/playerB3left.png', 'sprites/playerB4left.png', 'sprites/playerB5left.png', 'sprites/playerB6left.png')
+    cright = loadAnimation('sprites/404.png')
+    cleft = loadAnimation('sprites/404.png')
 
     img = loadImage("/background.png")
 }
@@ -75,6 +78,7 @@ function setup() {
             
         }  
     })
+    document.getElementById("current-char").innerText = "current: " + charactername
 }
 
 function windowResized() {
@@ -91,9 +95,13 @@ function draw() {
     var person = character + facing
     stroke('#f5942c')
     fill(245, 208, 44, 100)
-    animation(window[person], 0, 0)
     miclvl = mic.getLevel();
-
+    try {
+        animation(window[person], 0, 0)
+    } 
+    catch(err) {
+        animation(notfound, 0, 0)
+    }
 
     for (let value of dots) {
         var person = value.character + value.facing
@@ -101,8 +109,20 @@ function draw() {
         fill(245, 208, 44, 100)
         //ellipse(value.x ,value.y  + 32 , 20,10)
         animation(window[person], value.x - x, value.y - y)
+        try {
+            animation(window[person], value.x - x, value.y - y)
+        } 
+        catch(err) {
+            animation(notfound, value.x - x, value.y - y)
+        }
     }   
 
+    try {
+
+    } 
+    catch(err) {
+
+    }
     var displayx = x - 3840
     var displayy = y - 1504
     document.getElementById("xpos").innerHTML = "x:" + displayx
@@ -139,6 +159,18 @@ function musicreq() {
     }
 }
 
+function tweet() {
+    var val = document.querySelector('#tweet-input').value;
+    if (val.length > 1) {
+        var data = {
+            tweet:val,
+            id:socket.id
+        }
+        socket.emit('tweet', data)
+        document.querySelector('#tweet-input').value = ""
+    }
+}
+
 var keys = {
     w: false,
     a: false,
@@ -147,9 +179,9 @@ var keys = {
 };
 
 function sendpos() {
-    if (keys['w'] == true) { y = y - speed; facing = "center"}
+    if (keys['w'] == true) { y = y - speed}
     if (keys['a'] == true) { x = x - speed; facing = "left"} 
-    if (keys['s'] == true) { y = y + speed; facing = "center"}
+    if (keys['s'] == true) { y = y + speed}
     if (keys['d'] == true) { x = x + speed; facing = "right"} 
     var data = {
         id: socket.id,
@@ -160,7 +192,7 @@ function sendpos() {
     };
     socket.emit('usr', data)
 
-
+    localStorage.setItem("charactername", charactername)
     localStorage.setItem("character", character)
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
@@ -186,9 +218,7 @@ addEventListener("keydown", (event) => {
         case 27:
             document.getElementById('myModal').style.display = 'none';
     }
-    
-    
-    
+
     const musicInput = document.getElementById("music-input")
     musicInput.addEventListener("keyup", function(event) {
         if (event.keyCode == 13) {
@@ -196,7 +226,21 @@ addEventListener("keydown", (event) => {
         }
     });
 
+    const tweetInput = document.getElementById("tweet-input")
+    tweetInput.addEventListener("keyup", function(event) {
+        if (event.keyCode == 13) {
+            tweet()
+        }
+    })
+
     sendpos()
+    var displayx = x - 3840
+    var displayy = y - 1504
+    if (displayx > -700 && displayx < -130 && displayy > -300 && displayy < 270) {
+        document.getElementById("input-div").style.visibility = "visible"
+    } else {
+        document.getElementById("input-div").style.visibility = "hidden"
+    }
 });
 
 addEventListener("keyup", (event) => {
@@ -214,7 +258,7 @@ addEventListener("keyup", (event) => {
             keys.s = false
             break;
     }
-    facing = "center"
+    
     sendpos()
 });
 
@@ -287,12 +331,23 @@ socket.on('voice', function(data) {
 
 
 function changeChar() {
-    if (character == "a") {
-        character = "b"
-    } else {
-        character = "a"
+    document.getElementById("current-char").innerText = "current: " + charactername
+    switch (character) {
+        case "a": 
+            charactername = "Myon"
+            character = "b"
+            break;
+        case "b":
+            charactername = "404"
+            character = "c"
+            break;
+        case "c": 
+            charactername = "Eric"
+            character = "a"
+            break;
     }
     sendpos()
+    document.getElementById("current-char").innerText = "current: " + charactername
 }
 
 console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   

@@ -36,10 +36,13 @@
                     
                     <div style="padding-top: 10px;">
                         <button id="change-char" title="Change your character ＼(^ω^＼)" onclick="changeChar()">Select Character</button>
+                        <a id="current-char"></a>
                     </div>
 
-                    <div style="padding-top: 10px;">
-                        <input name="music-input" class="music-input" id="music-input" type="text" placeholder="Please send a youtube link" >
+                    <div id="input-div" style="padding-top: 10px;">
+                        
+                        <input name="music-input" class="text-input" id="music-input" type="text" placeholder="Request music" >
+                        <input class="text-input" id="tweet-input" type="text" type="text" placeholder="Send your message!">
                     </div>
                     <div id="volume">
                         <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume + 0.05; console.log('volume up')"> + </button>
@@ -51,7 +54,7 @@
 
             <audio id="player" src="https://uodrum.herokuapp.com/music" onended="load()" autoplay preload="metadata">
             </audio>     
-                      <!-- hhttp://localhost:3000/music -->
+                      <!-- http://localhost:3000/music -->
             <script>
                 var audio = document.getElementById("player");
                 audio.volume = 0.2;
