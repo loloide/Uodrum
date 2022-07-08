@@ -19,7 +19,7 @@ const userClient = new TwitterApi({
   appKey: process.env.APP_KEY,
   appSecret: process.env.APP_KEY_SECRET,
   accessToken: process.env.ACCESS_TOKEN,
-  accessSecret: process.env.ACCESS_TOKEN_SECRET,
+  accessSecret: process.env.ACCESS_TOKEN_SECRET
 });
 
 var io = require('socket.io')(server, {
@@ -58,6 +58,8 @@ io.sockets.on('connection', function (socket) {
         setTimeout(changeSong, song.milis)
       }
       playlist.push(song)
+      console.log(song)
+      console.log("playlist: " + playlist)
     })
   })
 
