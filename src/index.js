@@ -352,4 +352,4 @@ function changeChar() {
 }
 
 console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   
-document.getElementById("player").load()
+setTimeout(100, document.getElementById("player").load())
