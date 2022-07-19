@@ -6,7 +6,7 @@
         href="favicon.ico">
         <meta charset="UTF-8">
         <meta name="google-site-verification" content="OxbNSDKJWQCD9uegQxtCj6eCiKOrhAWcMnh8KHylo0g" />
-        <meta name="description" content="A room that is the size of the world.">
+        <meta name="description" content="A room the size of the world.">
         <link rel="stylesheet" href="styles.css">
         <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
@@ -36,10 +36,13 @@
                     
                     <div style="padding-top: 10px;">
                         <button id="change-char" title="Change your character ＼(^ω^＼)" onclick="changeChar()">Select Character</button>
+                        <a id="current-char"></a>
                     </div>
 
-                    <div style="padding-top: 10px;">
-                        <input name="music-input" class="music-input" id="music-input" type="text" placeholder="Please send a youtube link" >
+                    <div id="input-div" style="padding-top: 10px;">
+                        
+                        <input name="music-input" class="text-input" id="music-input" type="text" placeholder="Request music" >
+                        <input class="text-input" id="tweet-input" type="text" type="text" placeholder="Send your message!">
                     </div>
                     <div id="volume">
                         <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume + 0.05; console.log('volume up')"> + </button>
@@ -49,9 +52,9 @@
                 </div>
             </div>
 
-            <audio id="player" src="https://v-alhalla.herokuapp.com/music" onended="load()" autoplay preload="metadata">
+            <audio id="player" src="https://uodrum.herokuapp.com/music" onended="load()" autoplay preload="metadata">
             </audio>     
-                      <!-- hhttp://localhost:3000/music -->
+                      <!-- http://localhost:3000/music -->
             <script>
                 var audio = document.getElementById("player");
                 audio.volume = 0.2;
