@@ -21,7 +21,7 @@ if (localStorage.character) {
     charactername = localStorage.getItem("charactername")
 } else {
     character = "a"
-    alert("Welcome to v-alhalla  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. You can change the volume of the volume with the up and down keys")
+    alert("Welcome to Uodrum  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. You can change the volume of the volume with the up and down keys")
 }  
 
 if (localStorage != 0) {
@@ -351,4 +351,4 @@ function changeChar() {
     document.getElementById("current-char").innerText = "current: " + charactername
 }
 
-console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/V-alhalla")   
+console.log("hello there! i see you are quite curious, here's the git repo of this https://github.com/loloide/Uodrum")   
