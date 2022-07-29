@@ -238,9 +238,9 @@ addEventListener("keydown", (event) => {
     var displayx = x - 3840
     var displayy = y - 1504
     if (displayx > -700 && displayx < -130 && displayy > -300 && displayy < 270) {
-        document.getElementById("input-div").style.visibility = "visible"
+        document.getElementById("input-div").style.setProperty("visibility", "visible") 
     } else {
-        document.getElementById("input-div").style.visibility = "hidden"
+        document.getElementById("input-div").style.setProperty("visibility", "hidden")  
     }
 });
 

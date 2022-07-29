@@ -15,6 +15,20 @@ body {
     font-size: var(--fontsize);
 }
 
+#p5_loading {
+    position: relative;
+    text-align: center;
+    padding-top: 20%;
+    animation-name: loading;
+    animation-duration: 2s;
+}
+
+@keyframes loading {
+    0% {transform: scale(0,0);}
+    95% {transform: scale(1.01,1.01);}
+    100% {transform: scale(1,1);}
+}
+
 
 
 html {
