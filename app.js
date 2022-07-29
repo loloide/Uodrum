@@ -38,7 +38,9 @@ function changeSong() {
       setTimeout(changeSong, playlist[0].milis)
       console.log(playlist.length)
       io.sockets.emit("newsong")
+      io.sockets.emit('songname', playlist[0].name)
     }
+    
 }
 
 io.sockets.on('connection', function (socket) {
@@ -48,18 +50,21 @@ io.sockets.on('connection', function (socket) {
   socket.on('musicreq', function(data) {
     ytinfo.getInfo(data).then(info => {
       var milis = info.videoDetails.lengthSeconds * 1000
-      var song = {
+      var songname = info.videoDetails.title
+      var song = {  
         link: data,
-        milis: milis
+        milis: milis,
+        name: songname
       }
       if (playlist.length == 0) {
         io.sockets.emit("newsong")
         console.log("newsong")
         setTimeout(changeSong, song.milis)
+        io.sockets.emit('songname', songname)
       }
       playlist.push(song)
       console.log(song)
-      console.log("playlist: " + playlist)
+      console.log(songname)
     })
   })
 

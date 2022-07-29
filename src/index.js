@@ -130,6 +130,9 @@ function draw() {
     document.getElementById("ypos").innerHTML = "y:" + displayy
 }
 
+socket.on('songname', function(data) {
+    document.getElementById("song-title").innerText = "Playing: " + data
+})
 
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
@@ -154,9 +157,13 @@ socket.on('newsong', function() {
 function musicreq() {
 
     var val = document.querySelector('#music-input').value;
+    var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (val.length > 1) {
-        socket.emit('musicreq', val)
+        if(val.match(p)){
+            socket.emit('musicreq', val)
+        }
         document.querySelector('#music-input').value = ""
+        document.getElementById("music-input").placeholder = "sent!"
     }
 }
 
