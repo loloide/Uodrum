@@ -167,7 +167,6 @@ function musicreq() {
         }
         document.querySelector('#music-input').value = ""
         document.getElementById("music-input").placeholder = "Request sent!"
-        setTimeout(document.getElementById("music-input").placeholder = "Send youtube link", 1000)
     }
 }
 
@@ -181,7 +180,7 @@ function tweet() {
         socket.emit('tweet', data)
         document.querySelector('#tweet-input').value = ""
         document.getElementById("tweet-input").placeholder = "Message sent!"
-        setTimeout(document.getElementById("tweet-input").placeholder = "Send your message", 1000)
+        
     }
 }
 
