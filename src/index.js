@@ -167,7 +167,7 @@ function musicreq() {
         }
         document.querySelector('#music-input').value = ""
         document.getElementById("music-input").placeholder = "Request sent!"
-        setTimeout(document.getElementById("music-input").placeholder = "Send a youtube link", 1000)
+        setTimeout(document.getElementById("music-input").placeholder = "Send youtube link", 1000)
     }
 }
 
