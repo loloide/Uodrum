@@ -133,6 +133,9 @@ function draw() {
 socket.on('songname', function(data) {
     document.getElementById("song-title").innerText = "Playing: " + data
 })
+socket.on("nosong", function() {
+    document.getElementById("song-title").innerText = ""
+})
 
 socket.on('disusr', function(data) {
     dots.splice(dots.findIndex((obj => obj.id == data)))
