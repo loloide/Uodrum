@@ -4,7 +4,7 @@ socket = io.connect("https://uodrum.herokuapp.com/");
 var x = 3426
 var y = 1474
 var dots = []
-var speed = 4
+const speed = 4
 var mic
 var miclvl
 var facing = "right"   
