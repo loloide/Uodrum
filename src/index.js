@@ -16,6 +16,7 @@ var bright; var bleft
 var cright; var cleft
 var viewport
 
+
 if (localStorage.character) {
     character = localStorage.getItem("character")
     charactername = localStorage.getItem("charactername")
@@ -30,6 +31,11 @@ if (localStorage != 0) {
         y = parseInt(localStorage.y)
     }
 }  
+
+var lastcoords = {
+    x: x,
+    y:y
+}
 
 function preload() {
 
@@ -90,6 +96,7 @@ function draw() {
     
     translate(window.innerWidth / 2, window.innerHeight / 2)
 
+    background("#78741c")
     var backgr = img.get(x - window.innerWidth / 2, y - window.innerHeight / 2, window.innerWidth, window.innerHeight)
     background(backgr)
     
@@ -209,9 +216,18 @@ function sendpos() {
     localStorage.setItem("character", character)
     localStorage.setItem("x", x)
     localStorage.setItem("y", y)
+    if (x > 7606 || x < 76 || y > 2806 || y < 186) {
+        x = lastcoords.x
+        y = lastcoords.y
+    }   else {
+        lastcoords.x = x
+        lastcoords.y = y
+    }
 }
 
 addEventListener("keydown", (event) => {
+    
+
     switch (event.keyCode) {
         case 65:
             keys.a = true
