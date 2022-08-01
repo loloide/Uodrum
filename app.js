@@ -88,6 +88,10 @@ io.sockets.on('connection', function (socket) {
     playlist: playlist
   }
   socket.broadcast.emit('newusr', newusrinfo)
+  if (playlist.length != 0) {
+    io.sockets.emit('songname', playlist[0].name)
+  }
+  
 });
 //socket.broadcast.emit('usr', data); //(send to all except sender)
 
