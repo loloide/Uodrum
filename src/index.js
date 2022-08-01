@@ -90,6 +90,7 @@ function setup() {
 
 function windowResized() {
     resizeCanvas(window.innerWidth, window.innerHeight);
+    translate(window.innerWidth / 2, window.innerHeight / 2)
   }
 
 function draw() {
