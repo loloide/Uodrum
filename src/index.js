@@ -265,11 +265,11 @@ addEventListener("keydown", (event) => {
     sendpos()
     var displayx = x - 3840
     var displayy = y - 1504
-    if (displayx > -700 && displayx < -130 && displayy > -300 && displayy < 270) {
-        document.getElementById("input-div").style.setProperty("visibility", "visible") 
-    } else {
-        document.getElementById("input-div").style.setProperty("visibility", "hidden")  
-    }
+    // if (displayx > -700 && displayx < -130 && displayy > -300 && displayy < 270) {
+    //     document.getElementById("input-div").style.setProperty("visibility", "visible") 
+    // } else {
+    //     document.getElementById("input-div").style.setProperty("visibility", "hidden")  
+    // }
 });
 
 addEventListener("keyup", (event) => {
