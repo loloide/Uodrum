@@ -17,12 +17,13 @@ var cright; var cleft
 var viewport
 
 
+//localstorage
 if (localStorage.character) {
     character = localStorage.getItem("character")
     charactername = localStorage.getItem("charactername")
 } else {
     character = "a"
-    alert("Welcome to Uodrum  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. You can change the volume of the volume with the up and down keys")
+    alert("Welcome to Uodrum  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. Press E to open the menu")
 }  
 
 if (localStorage != 0) {
@@ -37,17 +38,16 @@ var lastcoords = {
     y:y
 }
 
+
+//p5js
 function preload() {
-
     notfound = loadAnimation('sprites/404.png')
-
     aright = loadAnimation('sprites/playerA1right.png', 'sprites/playerA2right.png', 'sprites/playerA3right.png', 'sprites/playerA4right.png', 'sprites/playerA5right.png', 'sprites/playerA6right.png')
     aleft = loadAnimation('sprites/playerA1left.png', 'sprites/playerA2left.png', 'sprites/playerA3left.png', 'sprites/playerA4left.png', 'sprites/playerA5left.png', 'sprites/playerA6left.png')
     bright = loadAnimation('sprites/playerB1right.png', 'sprites/playerB2right.png', 'sprites/playerB3right.png', 'sprites/playerB4right.png', 'sprites/playerB5right.png', 'sprites/playerB6right.png')
     bleft = loadAnimation('sprites/playerB1left.png', 'sprites/playerB2left.png', 'sprites/playerB3left.png', 'sprites/playerB4left.png', 'sprites/playerB5left.png', 'sprites/playerB6left.png')
     cright = loadAnimation('sprites/404.png')
     cleft = loadAnimation('sprites/404.png')
-
     img = loadImage("/background.png")
 }
 
@@ -68,9 +68,7 @@ function setup() {
             dots[index].y = data.y
             dots[index].character = data.character
             dots[index].facing = data.facing
-        } 
-
-        else {
+        } else {
             if (data.id !== undefined){
                 dots.push({
                     id: data.id,
@@ -79,28 +77,23 @@ function setup() {
                     character: data.character,
                     facing: data.facing
                 });
-                console.log(dots)
             }
             
         }  
     })
     document.getElementById("current-char").innerText = "current: " + charactername
-    
 }
 
 function windowResized() {
     resizeCanvas(window.innerWidth, window.innerHeight);
     translate(window.innerWidth / 2, window.innerHeight / 2)
-  }
+}
 
 function draw() {
-    
     translate(window.innerWidth / 2, window.innerHeight / 2)
-
     background("#78741c")
     var backgr = img.get(x - window.innerWidth / 2, y - window.innerHeight / 2, window.innerWidth, window.innerHeight)
     background(backgr)
-    
     var person = character + facing
     stroke('#f5942c')
     fill(245, 208, 44, 100)
@@ -111,7 +104,6 @@ function draw() {
     catch(err) {
         animation(notfound, 0, 0)
     }
-
     for (let value of dots) {
         var person = value.character + value.facing
         stroke('#f5942c')
@@ -125,22 +117,18 @@ function draw() {
             animation(notfound, value.x - x, value.y - y)
         }
     }   
-
-    try {
-
-    } 
-    catch(err) {
-
-    }
     var displayx = x - 3840
     var displayy = y - 1504
     document.getElementById("xpos").innerHTML = "x:" + displayx
     document.getElementById("ypos").innerHTML = "y:" + displayy
 }
 
+
+//Socket
 socket.on('songname', function(data) {
     document.getElementById("song-title").innerText = "Playing: " + data
 })
+
 socket.on("nosong", function() {
     document.getElementById("song-title").innerText = ""
 })
@@ -152,12 +140,7 @@ socket.on('disusr', function(data) {
 
 socket.on('newusr', function(data) {
     console.log("New user: " + data.id + " connected")
-    console.log(data.playlist)
     sendpos()
-})
-
-socket.on('musicreq', function(data) {
-    console.log(data)
 })
 
 socket.on('newsong', function() {
@@ -166,7 +149,6 @@ socket.on('newsong', function() {
 }) 
 
 function musicreq() {
-
     var val = document.querySelector('#music-input').value;
     var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (val.length > 1) {
@@ -188,10 +170,11 @@ function tweet() {
         socket.emit('tweet', data)
         document.querySelector('#tweet-input').value = ""
         document.getElementById("tweet-input").placeholder = "Message sent!"
-        
     }
 }
 
+
+//Movement
 var keys = {
     w: false,
     a: false,
@@ -211,8 +194,6 @@ function sendpos() {
         character: character,
         facing: facing
     };
-    socket.emit('usr', data)
-
     localStorage.setItem("charactername", charactername)
     localStorage.setItem("character", character)
     localStorage.setItem("x", x)
@@ -224,6 +205,7 @@ function sendpos() {
         lastcoords.x = x
         lastcoords.y = y
     }
+    socket.emit('usr', data)
 }
 
 addEventListener("keydown", (event) => {
@@ -293,7 +275,7 @@ addEventListener("keyup", (event) => {
 });
 
 
-//audio
+//Voice
 var constraints = { audio: true };
 
 navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
@@ -324,12 +306,12 @@ navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
     setInterval(function() {
         mediaRecorder.stop()
         mediaRecorder.start()
+
     }, 250);
 }); 
 
 
 
-// When the client receives a voice message it will play the sound
 socket.on('voice', function(data) {
     objIndex = dots.findIndex((obj => obj.id == data.id));
     function distanceFunction( x1, y1, x2, y2 ) {
@@ -342,24 +324,25 @@ socket.on('voice', function(data) {
          
         return Math.sqrt( xs + ys );
     };
-    dots.length > 1 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
+    dots.length > 0 ? distance = distanceFunction(x,y,dots[objIndex].x,dots[objIndex].y) : distance = 100;
     
     var blob = new Blob([data.b], { 'type' : 'audio/ogg; codecs=opus' });
     var audio = document.createElement('audio');
     audio.src = window.URL.createObjectURL(blob);
-    if (distance >= 500) {
+    if (distance > 500) {
         audio.volume = 0.01
     }
-    if (distance >= 200 && distance < 500) {
-        audio.volume = 0.2
+    if (distance > 150 && distance < 500) {
+        audio.volume = 0.3
     }
-    if (distance < 200) {
+    if (distance < 150) {
         audio.volume = 1
     }
     audio.play();
 });
 
 
+//Change character
 function changeChar() {
     document.getElementById("current-char").innerText = "current: " + charactername
     switch (character) {
