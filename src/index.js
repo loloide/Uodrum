@@ -148,6 +148,15 @@ socket.on('newsong', function() {
     document.getElementById("player").load()
 }) 
 
+socket.on("playlist", function(data){
+    var playlist = ""
+    for (var song of data) {
+        playlist = playlist + "\n" + song.name 
+    }
+    console.log(playlist)
+    document.getElementById("playlist").innerText = playlist
+})
+
 function musicreq() {
     var val = document.querySelector('#music-input').value;
     var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
@@ -226,6 +235,7 @@ addEventListener("keydown", (event) => {
             break;
         case 69:
             document.getElementById('myModal').style.display = 'block'
+            socket.emit("playlist")
             break;
         case 27:
             document.getElementById('myModal').style.display = 'none';

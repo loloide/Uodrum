@@ -73,14 +73,19 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('usr', data) 
   }) 
 
-  socket.on('disconnect', function() {
-    console.log("Client has disconnected " + socket.id);
+  socket.on('disconnect', (reason) => {
+    console.log("Client has disconnected " + socket.id + " " + reason);
     io.sockets.emit('disusr', socket.id)
+
   });
 
   socket.on('tweet', function(data) {
     userClient.v2.tweet(data.id + " says: \n" + data.tweet)
     console.log("user: " + data.id + " tweeted: '" + data.tweet + "'")
+  })
+
+  socket.on("playlist", function(data){
+    io.sockets.emit("playlist", playlist)
   })
 
   var newusrinfo = {

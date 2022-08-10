@@ -9,7 +9,7 @@
         <meta name="google-site-verification" content="FMdz9zBwyNYxD1_-grrgoDXz5Pit8J_YmeDBJH10g2A" />
         <meta name="description" content="A room the size of the world.">
         <link rel="stylesheet" href="styles.css">
-        <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script type="text/javascript" src="https://cdn.socket.io/4.5.1/socket.io.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/addons/p5.sound.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/molleindustria/p5.play/lib/p5.play.js"></script>
@@ -47,6 +47,7 @@
 
                     <div id="input-div" style="padding-top: 10px;">
                         <input name="music-input" class="text-input" id="music-input" type="text" placeholder="Request music" >
+                        <p id="playlist"></p>
                         <input class="text-input" id="tweet-input" type="text" type="text" placeholder="Send your message!">
                     </div>
                     <div id="volume">
@@ -57,9 +58,9 @@
                 </div>
             </div>
 
-            <audio id="player" src="https://uodrum.herokuapp.com/music" onended="load()" autoplay preload="metadata">
+            <audio id="player" src="http://localhost:3000/music" onended="load()" autoplay preload="metadata">
             </audio>     
-                      <!-- http://localhost:3000/music -->
+                      <!-- https://uodrum.herokuapp.com/music -->
             <script>
                 var audio = document.getElementById("player");
                 audio.volume = 0.2;
