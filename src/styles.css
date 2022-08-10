@@ -154,6 +154,10 @@ button {
     text-overflow: ellipsis;
 }
 
+ol {
+    padding-inline-start:50px;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */

@@ -44,21 +44,27 @@
                         <button id="change-char" title="Change your character ＼(^ω^＼)" onclick="changeChar()">Select Character</button>
                         <a id="current-char"></a>
                     </div>
-
+                    <hr>
                     <div id="input-div" style="padding-top: 10px;">
                         <input name="music-input" class="text-input" id="music-input" type="text" placeholder="Request music" >
-                        <p id="playlist"></p>
-                        <input class="text-input" id="tweet-input" type="text" type="text" placeholder="Send your message!">
+
+                        <div id="volume">
+                            <p style="float: left; margin-block-end: 0;">Volume: </p>
+                            <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume + 0.05; console.log('volume up')"> + </button>
+                            <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume - 0.05; console.log('volume down')"> - </button>
+                        </div>
+                        <p>Playlist:</p>
+                        <ol id="playlist">
+                        </ol> 
                     </div>
-                    <div id="volume">
-                        <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume + 0.05; console.log('volume up')"> + </button>
-                        <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume - 0.05; console.log('volume down')"> - </button>
-                    </div>
+                    <hr>
+                    <input class="text-input" id="tweet-input" type="text" type="text" placeholder="Send your message!">
+                    
                     
                 </div>
             </div>
 
-            <audio id="player" src="https://uodrum.herokuapp.com/music" onended="load()" autoplay preload="metadata">
+            <audio id="player" src="https://uodrum.herokuapp.com/music" onended="load(); socket.emit('songname')" autoplay preload="metadata">
             </audio>     
                       <!-- http://localhost:3000/music -->
             <script>

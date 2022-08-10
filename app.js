@@ -88,6 +88,10 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit("playlist", playlist)
   })
 
+  socket.on("songname", function() {
+    io.sockets.emit('songname', playlist[0].name)
+  })
+
   var newusrinfo = {
     id: socket.id,
     playlist: playlist

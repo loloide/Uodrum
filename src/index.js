@@ -149,12 +149,13 @@ socket.on('newsong', function() {
 }) 
 
 socket.on("playlist", function(data){
-    var playlist = ""
+    document.getElementById("playlist").replaceChildren();
+    var playlist = document.getElementById("playlist")
     for (var song of data) {
-        playlist = playlist + "\n" + song.name 
+        var playlistsong = document.createElement("li")
+        playlistsong.innerText = song.name
+        playlist.appendChild(playlistsong)
     }
-    console.log(playlist)
-    document.getElementById("playlist").innerText = playlist
 })
 
 function musicreq() {
@@ -240,12 +241,14 @@ addEventListener("keydown", (event) => {
             break;
         case 27:
             document.getElementById('myModal').style.display = 'none';
+            
     }
 
     const musicInput = document.getElementById("music-input")
     musicInput.addEventListener("keyup", function(event) {
         if (event.keyCode == 13) {
             musicreq()
+            socket.emit("playlist")
         }
     });
 
@@ -279,6 +282,8 @@ addEventListener("keyup", (event) => {
             break;
         case 83:
             keys.s = false
+            break;
+        case 69:
             break;
     }
     
