@@ -53,9 +53,12 @@
                             <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume + 0.05; console.log('volume up')"> + </button>
                             <button class="volume-button" onclick="document.getElementById('player').volume = document.getElementById('player').volume - 0.05; console.log('volume down')"> - </button>
                         </div>
-                        <p>Playlist:</p>
-                        <ol id="playlist">
-                        </ol> 
+                        <div>
+                            <p id="playlistlabel">Playlist:</p>
+                            <ol id="playlist">
+                            </ol> 
+                        </div>
+                        
                     </div>
                     <hr>
                     <input class="text-input" id="tweet-input" type="text" type="text" placeholder="Send your message!">

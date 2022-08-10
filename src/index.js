@@ -151,6 +151,12 @@ socket.on('newsong', function() {
 socket.on("playlist", function(data){
     document.getElementById("playlist").replaceChildren();
     var playlist = document.getElementById("playlist")
+    if (data.length > 0) {
+        document.getElementById("playlistlabel").innerText = "Playlist: "
+    } else {
+        document.getElementById("playlistlabel").innerText = ""
+    }
+
     for (var song of data) {
         var playlistsong = document.createElement("li")
         playlistsong.innerText = song.name
