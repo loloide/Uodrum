@@ -167,6 +167,7 @@ function musicreq() {
         document.querySelector('#music-input').value = ""
         document.getElementById("music-input").placeholder = "Request sent!"
     }
+    socket.emit("playlist")
 }
 
 function tweet() {
