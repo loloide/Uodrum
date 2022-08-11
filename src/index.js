@@ -244,7 +244,7 @@ addEventListener("keydown", (event) => {
             break;
         case 69:
             document.getElementById('myModal').style.display = 'block'
-            socket.emit("playlist")
+            
             
             break;
         case 27:
@@ -292,6 +292,7 @@ addEventListener("keyup", (event) => {
             keys.s = false
             break;
         case 69:
+            socket.emit("playlist")
             break;
     }
     
