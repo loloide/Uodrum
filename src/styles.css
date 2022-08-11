@@ -177,7 +177,7 @@ ol {
     text-align: left;
     margin: auto;
     padding: 20px;
-    width: 80%;
+    width: fit-content;
     clip-path: polygon(
         0px 12px,
         6px 12px,
