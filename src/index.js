@@ -162,6 +162,7 @@ socket.on("playlist", function(data){
         playlistsong.innerText = song.name
         playlist.appendChild(playlistsong)
     }
+    console.log("playlist req")
 })
 
 function musicreq() {
@@ -244,7 +245,7 @@ addEventListener("keydown", (event) => {
         case 69:
             document.getElementById('myModal').style.display = 'block'
             socket.emit("playlist")
-            console.log("playlist req")
+            
             break;
         case 27:
             document.getElementById('myModal').style.display = 'none';
