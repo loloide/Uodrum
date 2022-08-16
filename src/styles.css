@@ -97,7 +97,7 @@ footer {
 
 .text-input {
     height: 30px;
-    width: 253px;
+    width: 100%;
     clip-path: polygon(
         0px 4px,
         4px 4px,
