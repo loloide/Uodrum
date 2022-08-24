@@ -38,6 +38,7 @@ function changeSong() {
       setTimeout(changeSong, playlist[0].milis)
       io.sockets.emit("newsong")
       io.sockets.emit('songname', playlist[0].name)
+      io.sockets.emit("playlist", playlist)
     }
     io.sockets.emit("nosong")
 }
@@ -61,6 +62,7 @@ io.sockets.on('connection', function (socket) {
         io.sockets.emit('songname', songname)
       }
       playlist.push(song)
+      io.sockets.emit("playlist", playlist)
     })
   })
 
