@@ -94,8 +94,6 @@ function draw() {
     var backgr = img.get(x - window.innerWidth / 2, y - window.innerHeight / 2, window.innerWidth, window.innerHeight)
     background(backgr)
     var person = character + facing
-    stroke('#f5942c')
-    fill(245, 208, 44, 100)
     miclvl = mic.getLevel();
     try {
         animation(window[person], 0, 0)
@@ -105,9 +103,6 @@ function draw() {
     }
     for (let value of dots) {
         var person = value.character + value.facing
-        stroke('#f5942c')
-        fill(245, 208, 44, 100)
-        //ellipse(value.x ,value.y  + 32 , 20,10)
         animation(window[person], value.x - x, value.y - y)
         try {
             animation(window[person], value.x - x, value.y - y)

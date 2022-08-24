@@ -91,7 +91,10 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on("songname", function() {
-    io.sockets.emit('songname', playlist[0].name)
+    if (playlist.length != 0) {
+      io.sockets.emit('songname', playlist[0].name)
+    }
+    
   })
 
   var newusrinfo = {
