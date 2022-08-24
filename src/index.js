@@ -1,5 +1,5 @@
-socket = io.connect("https://uodrum.herokuapp.com/");
-//socket = io.connect("http://localhost:3000");
+//socket = io.connect("https://uodrum.herokuapp.com/");
+socket = io.connect("http://localhost:3000");
 
 var x = 3426
 var y = 1474
@@ -172,10 +172,11 @@ function musicreq() {
         if(val.match(p)){
             socket.emit('musicreq', val)
         }
+        socket.emit("playlist")
         document.querySelector('#music-input').value = ""
         document.getElementById("music-input").placeholder = "Request sent!"
     }
-    socket.emit("playlist")
+    
 }
 
 function tweet() {
@@ -256,7 +257,6 @@ addEventListener("keydown", (event) => {
     musicInput.addEventListener("keyup", function(event) {
         if (event.keyCode == 13) {
             musicreq()
-            socket.emit("playlist")
         }
     });
 

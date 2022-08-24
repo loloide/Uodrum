@@ -64,9 +64,9 @@
                 </div>
             </div>
 
-            <audio id="player" src="https://uodrum.herokuapp.com/music" onended="load(); socket.emit('songname')" autoplay preload="metadata">
+            <audio id="player" src="http://localhost:3000/music" onended="load(); socket.emit('songname')" autoplay preload="metadata">
             </audio>     
-                      <!-- http://localhost:3000/music -->
+                      <!-- https://uodrum.herokuapp.com/music -->
             <script>
                 var audio = document.getElementById("player");
                 audio.volume = 0.2;
