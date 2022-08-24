@@ -67,6 +67,7 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
     });
     addEventListener("touchend", () => {
         console.log("touch ended")
+        sendpos()
     })
 
   } else{
