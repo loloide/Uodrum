@@ -50,6 +50,30 @@ function preload() {
     img = loadImage("/background.png")
 }
 
+if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    // true for mobile device
+    console.log("mobile")
+    addEventListener('touchstart', (e) => {
+        if (window.innerWidth/3 > e.touches[0].clientX) {
+            x = x - 15; facing = "left"
+        } else if(window.innerWidth/3 * 2 < e.touches[0].clientX) {
+            x = x + 15; facing = "right"
+        }
+        if (window.innerHeight/3 > e.touches[0].clientY) {
+            y = y - 15
+        } else if(window.innerHeight/3 * 2 < e.touches[0].clientY) {
+            y = y + 15
+        }
+    });
+    addEventListener("touchend", () => {
+        console.log("touch ended")
+    })
+
+  } else{
+    // false for not mobile device
+    console.log("not mobile")
+}
+
 function setup() {
     frameRate(15)
     var canvas = createCanvas(window.innerWidth, window.innerHeight);
@@ -185,7 +209,6 @@ function tweet() {
         document.getElementById("tweet-input").placeholder = "Message sent!"
     }
 }
-
 
 //Movement
 var keys = {
