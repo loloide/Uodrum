@@ -64,6 +64,9 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
         } else if(window.innerHeight/3 * 2 < e.touches[0].clientY) {
             y = y + 15
         }
+        if (window.innerWidth/3 < e.touches[0].clientX && window.innerWidth/3 * 2 > e.touches[0].clientX && window.innerHeight/3 * 2 > e.touches[0].clientY && window.innerHeight/3 < e.touches[0].clientY) {
+            document.getElementById('myModal').style.display = 'block'
+        }
     });
     addEventListener("touchend", () => {
         console.log("touch ended")

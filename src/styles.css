@@ -173,6 +173,7 @@ ol {
   
   /* Modal Content */
   .modal-content {
+    max-width: 90%;
     background-color: rgba(22, 20, 19, 0.7);
     text-align: left;
     margin: auto;
