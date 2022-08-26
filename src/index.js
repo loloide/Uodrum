@@ -14,6 +14,7 @@ var aright; var aleft
 var bright; var bleft
 var cright; var cleft
 var viewport
+var onmenu = false
 
 
 //localstorage
@@ -249,30 +250,33 @@ function sendpos() {
 }
 
 addEventListener("keydown", (event) => {
-    
-
-    switch (event.keyCode) {
-        case 65:
-            keys.a = true
-            break;
-        case 87:
-            keys.w = true 
-            break;
-        case 68:
-            keys.d = true
-            break;
-        case 83:
-            keys.s = true
-            break;
-        case 69:
-            document.getElementById('myModal').style.display = 'block'
-            document.getElementById("tweet-input").placeholder = "Send your message to twitter! @UODRUM"
-            document.getElementById("music-input").placeholder = "Paste a Youtube link to a song!"
-            break;
-        case 27:
-            document.getElementById('myModal').style.display = 'none';
-            
+    if (onmenu == false) {
+        switch (event.keyCode) {
+            case 65:
+                keys.a = true
+                break;
+            case 87:
+                keys.w = true 
+                break;
+            case 68:
+                keys.d = true
+                break;
+            case 83:
+                keys.s = true
+                break;
+            case 69:
+                document.getElementById('myModal').style.display = 'block'
+                onmenu = true
+                document.getElementById("tweet-input").placeholder = "Send your message to twitter! @UODRUM"
+                document.getElementById("music-input").placeholder = "Paste a Youtube link to a song!"
+                break;
+            case 27:
+                document.getElementById('myModal').style.display = 'none'; 
+                onmenu = false
+        }
     }
+
+    
 
     const musicInput = document.getElementById("music-input")
     musicInput.addEventListener("keyup", function(event) {
