@@ -26,7 +26,7 @@ if (localStorage.character) {
     alert("Welcome to Uodrum  ヽ(*≧ω≦)ﾉ. Move with wasd. Enable microphone access to speak with others. Press E to open the menu")
 }  
 
-if (localStorage != 0) {
+if (localStorage) {
     if (localStorage.x != null && localStorage.y != null) {
         x = parseInt(localStorage.x)
         y = parseInt(localStorage.y)
@@ -35,7 +35,7 @@ if (localStorage != 0) {
 
 var lastcoords = {
     x: x,
-    y:y
+    y: y
 }
 
 
