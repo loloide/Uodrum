@@ -202,18 +202,18 @@ function musicreq() {
     
 }
 
-function tweet() {
-    var val = document.querySelector('#tweet-input').value;
-    if (val.length > 1) {
-        var data = {
-            tweet:val,
-            id:socket.id
-        }
-        socket.emit('tweet', data)
-        document.querySelector('#tweet-input').value = ""
-        document.getElementById("tweet-input").placeholder = "Message sent!"
-    }
-}
+// function tweet() {
+//     var val = document.querySelector('#tweet-input').value;
+//     if (val.length > 1) {
+//         var data = {
+//             tweet:val,
+//             id:socket.id
+//         }
+//         socket.emit('tweet', data)
+//         document.querySelector('#tweet-input').value = ""
+//         document.getElementById("tweet-input").placeholder = "Message sent!"
+//     }
+// }
 
 //Movement
 var keys = {
@@ -285,12 +285,12 @@ addEventListener("keydown", (event) => {
         }
     });
 
-    const tweetInput = document.getElementById("tweet-input")
-    tweetInput.addEventListener("keyup", function(event) {
-        if (event.keyCode == 13) {
-            tweet()
-        }
-    })
+    // const tweetInput = document.getElementById("tweet-input")
+    // tweetInput.addEventListener("keyup", function(event) {
+    //     if (event.keyCode == 13) {
+    //         tweet()
+    //     }
+    // })
 
     sendpos()
     var displayx = x - 3840
