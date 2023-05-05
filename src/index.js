@@ -267,7 +267,7 @@ addEventListener("keydown", (event) => {
             case 69:
                 document.getElementById('myModal').style.display = 'block'
                 onmenu = true
-                document.getElementById("tweet-input").placeholder = "Send your message to twitter! @UODRUM"
+                // document.getElementById("tweet-input").placeholder = "Send your message to twitter! @UODRUM"
                 document.getElementById("music-input").placeholder = "Paste a Youtube link to a song!"
                 break;
             case 27:
